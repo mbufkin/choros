@@ -1,0 +1,79 @@
+{
+  "title": "Solving One-Step Equations",
+  "domain": "algebra",
+  "week": 1,
+  "day": 1,
+  "steps": [
+    {
+      "type": "teach",
+      "title": "How to solve x + a = b",
+      "body": "To solve x + 5 = 12, subtract 5 from both sides.\nx + 5 - 5 = 12 - 5 \u2192 x = 7"
+    },
+    {
+      "type": "practice",
+      "concept": "one-step equations",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Solve: x + 3 = 10",
+          "answer": 7,
+          "options": [
+            {
+              "text": "7",
+              "correct": true,
+              "insight": "x = 10 - 3 = 7"
+            },
+            {
+              "text": "13",
+              "correct": false,
+              "reason": "added-instead-of-subtracted",
+              "insight": "You added instead of subtracting."
+            },
+            {
+              "text": "8",
+              "correct": false,
+              "reason": "arithmetic-error",
+              "insight": "10 - 3 = 7, not 8."
+            },
+            {
+              "text": "3",
+              "correct": false,
+              "reason": "random-guess",
+              "insight": "That is the number being added."
+            }
+          ]
+        },
+        {
+          "id": "q2",
+          "text": "Solve: x - 7 = 15",
+          "answer": 22,
+          "options": [
+            {
+              "text": "22",
+              "correct": true,
+              "insight": "x = 15 + 7 = 22"
+            },
+            {
+              "text": "8",
+              "correct": false,
+              "reason": "added-instead-of-subtracted",
+              "insight": "Add 7 to both sides, not subtract."
+            },
+            {
+              "text": "-22",
+              "correct": false,
+              "reason": "sign-error",
+              "insight": "15 + 7 = 22, not -22."
+            },
+            {
+              "text": "15",
+              "correct": false,
+              "reason": "random-guess",
+              "insight": "That is the right side value."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "lesson_id": "week-01-day-01",
+  "timestamp": "2026-06-15T14:38:09Z",
+  "score": 50.0,
+  "correct": 1,
+  "total": 2,
+  "results": [
+    {
+      "questionId": "q1",
+      "chosen": "7",
+      "correct": true,
+      "correctAnswer": "7",
+      "reasonTag": "",
+      "insight": "x = 10 - 3 = 7"
+    },
+    {
+      "questionId": "q2",
+      "chosen": "8",
+      "correct": false,
+      "correctAnswer": "22",
+      "reasonTag": "added-instead-of-subtracted",
+      "insight": "Add 7 to both sides, not subtract."
+    }
+  ]
+}

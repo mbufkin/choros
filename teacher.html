@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Phren — Teacher</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"] },
+          colors: { brand: { 400: "#818cf8", 500: "#6366f1", 600: "#4f46e5", 700: "#4338ca" } },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    .upload-zone.dragover { border-color: #6366f1; background: rgba(99,102,241,0.08); }
+    .spin { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-200 font-sans antialiased">
+  <!-- Background glow -->
+  <div class="pointer-events-none fixed inset-0 -z-10 opacity-50"
+       style="background: radial-gradient(60% 50% at 20% 0%, rgba(99,102,241,0.12), transparent 60%), radial-gradient(50% 40% at 80% 5%, rgba(168,85,247,0.08), transparent 55%);"></div>
+
+  <!-- Header -->
+  <header class="border-b border-white/5 bg-slate-950/70 backdrop-blur sticky top-0 z-20">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2.5 hover:opacity-80 transition" title="Back to Phren">
+        <span class="grid place-items-center w-7 h-7 rounded-lg bg-brand-500 text-white font-bold text-xs">φ</span>
+        <span class="font-extrabold tracking-tight">Phren</span>
+        <span class="text-slate-500 text-sm ml-1">— Teacher</span>
+      </a>
+      <div class="flex items-center gap-3">
+        <span id="model-badge" class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded">...</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 sm:px-6 py-8 space-y-10">
+
+    <!-- ===== SECTION 1: Upload Buckets ===== -->
+    <section>
+      <h2 class="text-lg font-semibold mb-4">📁 Upload Materials</h2>
+      <p class="text-slate-400 text-sm mb-4">Upload your curriculum, district documents, and past work. The system will analyze everything together to map your year.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="upload-grid">
+        <!-- Curriculum Bucket -->
+        <div class="border border-dashed border-slate-600 rounded-xl p-5 upload-zone"
+             data-bucket="curriculum"
+             id="zone-curriculum">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">📘</span>
+            <h3 class="font-medium text-sm">Curriculum Provider</h3>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">Textbook chapters, scope &amp; sequence, publisher materials</p>
+          <input type="file" multiple accept=".pdf,.txt,.md,.docx,.html"
+                 class="hidden" id="file-curriculum" data-bucket="curriculum" />
+          <button onclick="document.getElementById('file-curriculum').click()"
+                  class="w-full py-2 text-xs font-medium border border-slate-600 rounded-lg text-slate-300 hover:border-brand-500 hover:text-brand-400 transition">
+            + Add Files
+          </button>
+          <div class="mt-2 text-xs text-slate-600 file-list" id="list-curriculum"></div>
+        </div>
+
+        <!-- District Bucket -->
+        <div class="border border-dashed border-slate-600 rounded-xl p-5 upload-zone"
+             data-bucket="district"
+             id="zone-district">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">🏫</span>
+            <h3 class="font-medium text-sm">District Materials</h3>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">Policies, school calendar, standardized tests, syllabi</p>
+          <input type="file" multiple accept=".pdf,.txt,.md,.docx,.html"
+                 class="hidden" id="file-district" data-bucket="district" />
+          <button onclick="document.getElementById('file-district').click()"
+                  class="w-full py-2 text-xs font-medium border border-slate-600 rounded-lg text-slate-300 hover:border-brand-500 hover:text-brand-400 transition">
+            + Add Files
+          </button>
+          <div class="mt-2 text-xs text-slate-600 file-list" id="list-district"></div>
+        </div>
+
+        <!-- Teacher Bucket -->
+        <div class="border border-dashed border-slate-600 rounded-xl p-5 upload-zone"
+             data-bucket="teacher"
+             id="zone-teacher">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-lg">✏️</span>
+            <h3 class="font-medium text-sm">Teacher Materials</h3>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">Past worksheets, exit tickets, style exemplars</p>
+          <input type="file" multiple accept=".pdf,.txt,.md,.docx,.html"
+                 class="hidden" id="file-teacher" data-bucket="teacher" />
+          <button onclick="document.getElementById('file-teacher').click()"
+                  class="w-full py-2 text-xs font-medium border border-slate-600 rounded-lg text-slate-300 hover:border-brand-500 hover:text-brand-400 transition">
+            + Add Files
+          </button>
+          <div class="mt-2 text-xs text-slate-600 file-list" id="list-teacher"></div>
+        </div>
+      </div>
+
+      <!-- Crystallize Button -->
+      <div class="mt-6 flex items-center gap-4">
+        <button id="crystallize-btn"
+                class="px-5 py-2.5 bg-brand-500 hover:bg-brand-400 text-white text-sm font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+          🔬 Crystallize Curriculum
+        </button>
+        <span id="crystallize-status" class="text-sm text-slate-400"></span>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 2: Report ===== -->
+    <section id="report-section" class="hidden">
+      <h2 class="text-lg font-semibold mb-4">📊 Crystallization Report</h2>
+      <div id="report-content" class="space-y-4"></div>
+    </section>
+
+    <!-- ===== SECTION 3: Student Progress ===== -->
+    <section>
+      <h2 class="text-lg font-semibold mb-4">👥 Students</h2>
+      <p class="text-sm text-slate-500">Student progress will appear here once lessons are deployed (Phase 5).</p>
+      <div id="student-list" class="mt-3 grid grid-cols-1 sm:grid-cols-5 gap-3">
+        <div class="border border-slate-700 rounded-lg p-3 text-center text-slate-600 text-sm" id="stub-01">Student 01<br><span class="text-xs">—</span></div>
+        <div class="border border-slate-700 rounded-lg p-3 text-center text-slate-600 text-sm" id="stub-02">Student 02<br><span class="text-xs">—</span></div>
+        <div class="border border-slate-700 rounded-lg p-3 text-center text-slate-600 text-sm" id="stub-03">Student 03<br><span class="text-xs">—</span></div>
+        <div class="border border-slate-700 rounded-lg p-3 text-center text-slate-600 text-sm" id="stub-04">Student 04<br><span class="text-xs">—</span></div>
+        <div class="border border-slate-700 rounded-lg p-3 text-center text-slate-600 text-sm" id="stub-05">Student 05<br><span class="text-xs">—</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="teacher.js"></script>
+</body>
+</html>

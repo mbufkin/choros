@@ -1,0 +1,47 @@
+{
+  "syllabus": [
+    {
+      "unit": 1,
+      "title": "Linear Equations, Graphing, and Systems",
+      "weeks": [
+        1,
+        2,
+        3
+      ],
+      "topics": [
+        "linear equations",
+        "graphing",
+        "systems"
+      ],
+      "sourceRefs": [
+        "test-algebra2.txt: Algebra chapter: linear equations, graphing, systems"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "topic": "Quadratic functions and equations",
+      "severity": "high",
+      "detail": "Standard Algebra 2 curriculum typically includes quadratics, but no mention in provided documents.",
+      "recommendation": "Teacher should provide scope for quadratic units if this is intended as a full-year Algebra 2 course."
+    },
+    {
+      "topic": "Polynomial operations and factoring",
+      "severity": "high",
+      "detail": "Core Algebra 2 topic not referenced in any document.",
+      "recommendation": "Teacher should define polynomial unit scope or provide supporting materials."
+    }
+  ],
+  "coverage": {
+    "totalTopics": 3,
+    "covered": 3,
+    "gaps": 2
+  },
+  "pacing": {
+    "totalWeeks": 36,
+    "mappedWeeks": 3,
+    "flexWeeks": 33,
+    "notes": "Only 3 weeks of content mapped; remaining time requires additional units (e.g., quadratics, polynomials, rational expressions, exponential/logarithmic functions, etc.) to constitute a full Algebra 2 curriculum."
+  },
+  "generated": "2026-06-15T13:55:13Z"
+}
