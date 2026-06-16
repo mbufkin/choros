@@ -110,6 +110,30 @@ Student:
 - Desktop: two-column grids where appropriate (dashboard + detail panel)
 - Dark mode only — no light mode toggle (academic focus, eye comfort)
 
+## System Principles
+
+### Audit Log
+
+Every teacher action that modifies system state is recorded in the stateful teacher JSON file. This is non-negotiable.
+
+| Action | Recorded |
+|--------|----------|
+| Crystallization approved | Timestamp, document set, checkpoint map |
+| Lesson bundle accepted | Timestamp, lesson IDs, any adjustments |
+| Pacing adjusted | Timestamp, old dates, new dates, reason |
+| Remediation skipped for student | Timestamp, student ID, item skipped |
+| Quiz generated | Timestamp, parameters (count, topic, type) |
+
+The audit log is the legal and professional record. If something goes wrong, the system proves what decision was made and when. This protects both the teacher and the system.
+
+### Support Without Judgment
+
+Choros never sorts teachers into categories. No labels. No tiers. No "remedial" flags. Good teachers receive sharper insight because the data supports it. Struggling teachers receive stronger scaffolding because the system provides more structure. The teacher experience adapts, but the system never pronounces judgment on the teacher.
+
+### Degrade Gracefully
+
+The system works across hardware tiers. A 120B model on multi-GPU hardware runs the full pipeline. A 32B model on a single workstation runs core features. A laptop with no local model handles scoring and gap reports from teacher-provided data. The UI is the same. The principles are the same. The capabilities differ silently.
+
 ## Anti-Patterns (Do Not)
 
 - ❌ Light mode or theme toggle — dark only

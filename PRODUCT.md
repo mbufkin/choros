@@ -2,9 +2,9 @@
 
 ## Product Intent
 
-Choros is a **cohort AI teacher** that helps classroom teachers generate high-quality instructional materials from their own source documents, deliver them to students, and get actionable insight into what students are struggling with — all running on private hardware with no data leaving the network.
+Choros is a **cohort AI teacher** — a year-long system that helps classroom teachers generate instructional materials from their own source documents, deliver them to students, and get actionable insight into what students are struggling with. All running on private hardware with no data leaving the network.
 
-A teacher uploads their curriculum documents. The system crystallizes them into a structured map. It generates lessons from that map. Students complete them on individual pages. The teacher sees which concepts are breaking down across the cohort — not just scores, but specific misconception patterns.
+Choros is not a one-shot program. It is a phased system that follows the school year. Things happen in order. Each phase depends on the one before it.
 
 ## Target Users
 
@@ -13,42 +13,81 @@ A teacher uploads their curriculum documents. The system crystallizes them into 
 - Mid-career teachers who know their content but spend hours adapting curriculum into usable materials
 - Veteran teachers who have deep expertise but face rigid district requirements
 
-## The Core Constraint: Documentation as Single Source of Truth
+## Core Principles
 
-The model cannot go outside the documentation. Every lesson, every question, every feedback response must be grounded in the uploaded source documents. The AI doesn't invent curriculum — it segments, remixes, and delivers existing curriculum.
+### Support Without Judgment
+Good teachers get sharper insight. Struggling teachers get stronger scaffolding. Choros never sorts teachers into buckets, never labels, never flags a teacher as "remedial." The system provides without evaluating the provider.
 
-This is not a limitation. It's the safety mechanism that prevents drift. When the documentation is complete, the model has nowhere to drift *to*.
+### Documentation as Single Source of Truth
+The model cannot go outside the uploaded documentation. Every lesson, question, and feedback response is grounded in source documents. The model segments, remixes, and delivers — it does not invent.
 
-## Jobs to Be Done
+**Time will drift. Content will not.** A class falls behind schedule — that's reality. But the model never fabricates a standard, a fact, or a concept. If content is wrong in the source documents, that's a district-level issue. Version one assumes people do their jobs.
 
-1. **"Turn my curriculum into something I can actually use tomorrow."** Teacher uploads textbook chapters, district scope-and-sequence, and their own past worksheets. System produces ready-to-use lessons in their style.
+### Audit Log as Foundation
+Every teacher action that modifies system state is recorded. Teacher approved lesson bundle 3 on October 12th. Teacher adjusted pacing for unit 4 on November 3rd. Teacher skipped remediation for a student on December 1st. The audit log is the legal and professional record — non-negotiable. If something goes wrong, the system proves what decision was made and when.
 
-2. **"Show me what my students actually don't understand."** Not just scores — which specific concepts are breaking down, and why (which wrong answer pattern → which misconception).
+### Any Size District
+Choros degrades gracefully. If a district has a 120B model on local hardware, it runs the full pipeline. If they have a 32B model on a workstation, it runs core features. If they have a laptop and an Excel sheet, it still provides value. Build for the hardest constraint first. Prove it on 32B local hardware — if it works there, it works anywhere.
 
-3. **"Don't make me learn new software."** The system adapts to existing teacher workflows — upload documents, click a few buttons, get results. No chat, no prompt engineering, no AI literacy required.
+## The Phases
 
-4. **"Keep my students' data private."** Everything runs on local hardware. No cloud, no API keys shared with students, no data leaving the building.
+### Phase 1 — Pre-School Setup
+Documentation is loaded:
+- School calendar (holidays, PD days, early release)
+- Syllabus / scope and sequence
+- Textbook and supplementary materials
+- District requirements (testing dates, pacing guides)
+- State standards (optional, deferred beyond POC)
 
-## MVP Scope (POC)
+A stateful teacher JSON file is created. This file grows across the year and holds information the model needs to orient itself: pacing decisions made, misconceptions that emerged, adjustments approved, and the full audit log. We don't know the complete shape yet — it will be discovered through testing.
 
-- 1 teacher, 5 students, basic algebra
-- 3-bucket upload (curriculum / district / teacher)
-- Overnight crystallization pass → curriculum map + gap report
-- Weekly lesson generation (pre-assessment + new content + practice)
-- 5 individual student pages
-- Deterministic quiz scoring + LLM misconception analysis
-- Auto-generated remediation for next lesson cycle
-- All local, no external integrations
+### Phase 2 — Crystallization ("Year at a Glance")
+Documentation is synthesized into a structured curriculum map with checkpoints. The granularity — year at a glance, quarter at a glance, week at a glance — depends on what the provider gives.
+
+Checkpoints are the drift prevention mechanism. Milestones must be reached at specific times. If the syllabus says "Chapter 5 by October," the checkpoint enforces it. The model generates lessons that stay inside the checkpoint boundaries.
+
+Once documentation + scope + checkpoints are signed off by the teacher, the system moves to execution. No creeping. No scope expansion without re-approval.
+
+### Phase 3 — In-Year Execution
+
+**Roster setup:** Students are pulled in (method TBD for POC). An individual file per classroom is created. The same student can exist across multiple classrooms — joinable by student number or email. Cross-class identity is noted but not built for teacher mode v1.
+
+**Pre-assessment:** Establishes baseline understanding at the start of the year. Can be provided by the teacher OR generated by the model. Measures growth from this baseline across the year.
+
+**Lesson generation:** The model helps the teacher generate lessons that keep the class on pace. The model must understand class length (45 minutes vs 90 minutes) and generate accordingly. Number of sessions between checkpoints is calculated — not minutes, sessions. The model recalculates remaining sessions dynamically as the calendar shifts (holidays, snow days, assemblies).
+
+**Student work submission:** Students can either:
+- Enter answers directly on individual web pages (deep feedback — model sees question-level data)
+- Use an Excel/CSV import for assignment grades (shallow feedback — scores only, no misconception signal)
+
+The webpage path is preferred because it gives the teacher feedback about what's breaking. The model generates quizzes with customization: number of questions, topic focus, question type. Teachers feel in total control — they click "Quiz," specify what they want, and the system produces it.
+
+**Teacher interactions:** Buttons only. No chat. No prompt engineering. The model works behind the scenes. The teacher makes decisions; the AI processes them. This is not a copilot — it's an engine.
+
+### Phase 4 — Mid-Year Exam (MOY)
+
+The MOY is the major power of the system — the strongest feedback point.
+
+Two paths:
+- **Use existing MOY:** District provides the exam. Teacher enters results in a machine-readable format. The system flags gaps and patterns.
+- **Generate MOY:** The model creates a mid-year exam based on what was taught, validated against the original curriculum documents. This is exceptionally powerful but requires teacher review of every generated item.
+
+If the model writes the test AND teaches the lessons, validation is critical. The audit trail ensures every MOY item can be traced back to a curriculum standard.
+
+### Phase 5 — End of Year (EOY)
+
+Culmination exam. Same patterns as MOY. Full year of data — pre-assessment → checkpoint performance → MOY → EOY — visible as a growth trajectory.
 
 ## Non-Goals
 
-- Replacing curriculum — Choros segments and delivers existing curriculum, doesn't create new scope-and-sequence
-- Replacing teachers — the teacher makes pedagogical decisions; Choros provides tools and data
-- Real-time teacher-model chat — interactions are buttons, decisions, approvals; no back-and-forth
+- Replacing curriculum — Choros segments and delivers existing curriculum
+- Replacing teachers — the teacher makes pedagogical decisions
+- Real-time teacher-model chat — interactions are buttons, decisions, approvals
 - LMS integration (PowerSchool, Google Classroom) — deferred beyond POC
 - State standards alignment (TEKS) — deferred beyond POC
-- District-scale deployment (50,000+ students) — architecture is POC-scale by design
+- District-scale deployment (50,000+ students) — architecture is POC-scale
 - Single-learner self-study — that's Phren's domain
+- Judging teacher quality — the system supports, never evaluates
 
 ## Relationship to Phren
 
@@ -60,12 +99,5 @@ This is not a limitation. It's the safety mechanism that prevents drift. When th
 | AI role | Personal coach | Force multiplier |
 | Output | Interactive course | Lessons + cohort analytics |
 | Scale | 1 student | 1 teacher, N students |
-
-## Success Criteria (POC)
-
-- Teacher uploads 3 document buckets → receives actionable curriculum map within one overnight pass
-- System generates 5 algebra lessons with pre-assessments, instruction, and practice with distractor rationale
-- 5 students complete lessons on individual pages and receive misconception-specific feedback on wrong answers
-- Aggregate gap report identifies common misconceptions across students
-- Remediation content is auto-generated and addresses the identified gaps
-- Zero data leaves the local network
+| Timeframe | One session | Full school year |
+| Teacher file | None | Stateful, audit-logged, grows across year |
