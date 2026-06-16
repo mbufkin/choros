@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choros — Year Map (4K)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      width: 3840px;
+      min-height: 2160px;
+      color: #e2e8f0;
+      padding: 80px 120px;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .header-symbol {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 160px;
+      font-style: italic;
+      color: #c97d60;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: 12px;
+      color: #e0d0a0;
+      margin-bottom: 12px;
+    }
+
+    .header .subtitle {
+      color: #7a6a40;
+      font-size: 28px;
+      letter-spacing: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* ========== TIMELINE ========== */
+    .timeline-container {
+      background: rgba(15, 23, 42, 0.3);
+      border-radius: 40px;
+      border: 2px solid #1e293b;
+      padding: 60px 50px;
+      margin-bottom: 60px;
+    }
+
+    /* Phase row */
+    .phase-row {
+      display: flex;
+      gap: 0;
+      margin-bottom: 40px;
+    }
+
+    .phase {
+      flex: 1;
+      position: relative;
+      padding: 40px 30px;
+      border-radius: 24px;
+      text-align: center;
+    }
+
+    .phase-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      margin-bottom: 16px;
+      opacity: 0.7;
+    }
+
+    .phase-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    .phase h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .phase .when {
+      font-size: 20px;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Phase colors */
+    .phase-1 { background: rgba(201, 125, 96, 0.08); border: 2px solid rgba(201, 125, 96, 0.2); }
+    .phase-1 .phase-num { color: #c97d60; }
+    .phase-1 h3 { color: #c97d60; }
+
+    .phase-2 { background: rgba(245, 158, 11, 0.06); border: 2px solid rgba(245, 158, 11, 0.15); }
+    .phase-2 .phase-num { color: #f59e0b; }
+    .phase-2 h3 { color: #f59e0b; }
+
+    .phase-3 { background: rgba(34, 211, 238, 0.06); border: 2px solid rgba(34, 211, 238, 0.15); }
+    .phase-3 .phase-num { color: #22d3ee; }
+    .phase-3 h3 { color: #22d3ee; }
+
+    .phase-4 { background: rgba(167, 139, 250, 0.06); border: 2px solid rgba(167, 139, 250, 0.15); }
+    .phase-4 .phase-num { color: #a78bfa; }
+    .phase-4 h3 { color: #a78bfa; }
+
+    .phase-5 { background: rgba(34, 197, 94, 0.06); border: 2px solid rgba(34, 197, 94, 0.15); }
+    .phase-5 .phase-num { color: #22c55e; }
+    .phase-5 h3 { color: #22c55e; }
+
+    /* Arrow flow */
+    .arrow-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    .arrow-bar {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    .a-p1 { background: linear-gradient(90deg, #c97d60, rgba(245,158,11,0.5)); }
+    .a-p2 { background: linear-gradient(90deg, rgba(245,158,11,0.5), rgba(34,211,238,0.5)); }
+    .a-p3 { background: linear-gradient(90deg, rgba(34,211,238,0.5), rgba(167,139,250,0.5)); }
+    .a-p4 { background: linear-gradient(90deg, rgba(167,139,250,0.5), #22c55e); }
+
+    .arrow-chevron {
+      color: #475569;
+      font-size: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      margin: 0 4px;
+    }
+
+    /* Detail Cards */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 24px;
+    }
+
+    .detail-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 20px;
+      border: 2px solid #1e293b;
+      padding: 32px 28px;
+    }
+
+    .detail-card h4 {
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 24px;
+    }
+
+    .dc-1 h4 { color: #c97d60; }
+    .dc-2 h4 { color: #f59e0b; }
+    .dc-3 h4 { color: #22d3ee; }
+    .dc-4 h4 { color: #a78bfa; }
+    .dc-5 h4 { color: #22c55e; }
+
+    .detail-card ul {
+      list-style: none;
+      font-size: 18px;
+      color: #94a3b8;
+      line-height: 1.9;
+    }
+
+    .detail-card li { padding-left: 24px; position: relative; margin-bottom: 6px; }
+    .detail-card li::before { content: '•'; position: absolute; left: 0; opacity: 0.5; font-size: 22px; line-height: 1.6; }
+
+    .actor-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 5px;
+      margin-left: 8px;
+      display: inline-block;
+    }
+
+    .at-teacher  { background: rgba(201, 125, 96, 0.2); color: #c97d60; }
+    .at-frontier { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .at-local    { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .at-student  { background: rgba(34, 211, 238, 0.2); color: #22d3ee; }
+
+    /* Bottom Summary */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 20px;
+      border: 2px solid #1e293b;
+      padding: 36px 32px;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .card-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
+    .card-dot.copper  { background: #c97d60; }
+    .card-dot.amber   { background: #f59e0b; }
+    .card-dot.emerald { background: #34d399; }
+    .card-dot.cyan    { background: #22d3ee; }
+
+    .card h3 { font-size: 22px; font-weight: 700; }
+    .card p  { color: #94a3b8; font-size: 18px; line-height: 1.7; }
+    .card ul { list-style: none; color: #94a3b8; font-size: 18px; line-height: 1.8; }
+    .card li { padding-left: 22px; position: relative; margin-bottom: 4px; }
+    .card li::before { content: '•'; position: absolute; left: 0; opacity: 0.5; }
+    .card strong { color: #cbd5e1; }
+
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      color: #475569;
+      font-size: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-symbol">χ</div>
+    <h1>C H O R O S</h1>
+    <p class="subtitle">Year Map · Cohort AI Teacher</p>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-container">
+
+    <!-- Phase headers -->
+    <div class="phase-row">
+      <div class="phase phase-1">
+        <div class="phase-num">Phase 1</div>
+        <div class="phase-icon">📋</div>
+        <h3>Pre-School Setup</h3>
+        <div class="when">July – August</div>
+      </div>
+      <div class="phase phase-2">
+        <div class="phase-num">Phase 2</div>
+        <div class="phase-icon">🗺️</div>
+        <h3>Crystallization</h3>
+        <div class="when">August</div>
+      </div>
+      <div class="phase phase-3">
+        <div class="phase-num">Phase 3</div>
+        <div class="phase-icon">📖</div>
+        <h3>In-Year Execution</h3>
+        <div class="when">August – May</div>
+      </div>
+      <div class="phase phase-4">
+        <div class="phase-num">Phase 4</div>
+        <div class="phase-icon">🎯</div>
+        <h3>Mid-Year Exam</h3>
+        <div class="when">December – January</div>
+      </div>
+      <div class="phase phase-5">
+        <div class="phase-num">Phase 5</div>
+        <div class="phase-icon">🏁</div>
+        <h3>End of Year</h3>
+        <div class="when">May – June</div>
+      </div>
+    </div>
+
+    <!-- Arrow flow -->
+    <div class="arrow-row">
+      <div class="arrow-bar a-p1"></div>
+      <div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p2"></div>
+      <div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p3"></div>
+      <div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p4"></div>
+      <div class="arrow-chevron">▶</div>
+    </div>
+
+    <!-- Detail cards -->
+    <div class="detail-grid">
+      <div class="detail-card dc-1">
+        <h4>Setup</h4>
+        <ul>
+          <li>Upload calendar <span class="actor-tag at-teacher">teacher</span></li>
+          <li>Upload syllabus</li>
+          <li>Upload textbook</li>
+          <li>Upload district documents</li>
+          <li>Stateful teacher JSON created</li>
+          <li>No minimum doc set —<br>work with what is given</li>
+          <li>Calendar format ingested<br>(ICS, PDF, or manual entry)</li>
+        </ul>
+      </div>
+
+      <div class="detail-card dc-2">
+        <h4>Map the Year</h4>
+        <ul>
+          <li>Frontier model processes<br>all documents <span class="actor-tag at-frontier">frontier</span></li>
+          <li>Structured curriculum map<br>with checkpoints</li>
+          <li>Checkpoint granularity:<br>Year / Quarter / Week</li>
+          <li>Teacher reviews &amp; approves <span class="actor-tag at-teacher">teacher</span></li>
+          <li>Audit log records approval</li>
+          <li>Class type documented<br>(45 min / 90 min / block)</li>
+        </ul>
+      </div>
+
+      <div class="detail-card dc-3">
+        <h4>Teach &amp; Learn</h4>
+        <ul>
+          <li>Roster pulled in — per-class files</li>
+          <li>Pre-assessment <span class="actor-tag at-frontier">frontier</span></li>
+          <li>Lessons generated <span class="actor-tag at-local">local</span></li>
+          <li>Students complete on web <span class="actor-tag at-student">student</span></li>
+          <li>Deterministic quiz scoring</li>
+          <li>Misconception tagging <span class="actor-tag at-local">local</span></li>
+          <li>Session pacing recalculated<br>around holidays &amp; assemblies</li>
+          <li>Pacing adjustments logged<br>to audit trail</li>
+        </ul>
+      </div>
+
+      <div class="detail-card dc-4">
+        <h4>Strongest Signal</h4>
+        <ul>
+          <li>Use existing MOY <strong>or</strong> <span class="actor-tag at-teacher">teacher</span></li>
+          <li>Generate MOY <span class="actor-tag at-frontier">frontier</span></li>
+          <li>Item-level validation<br>against curriculum docs</li>
+          <li>Cross-cohort gap analysis</li>
+          <li>Remediation suggestions<br>per student / per standard</li>
+          <li>Teacher reviews every item <span class="actor-tag at-teacher">teacher</span></li>
+          <li>Uncovered standards flagged —<br>never fail silently</li>
+        </ul>
+      </div>
+
+      <div class="detail-card dc-5">
+        <h4>Full Picture</h4>
+        <ul>
+          <li>Culmination exam</li>
+          <li>Growth trajectory visible:<br>Pre → Checkpoints → MOY → EOY</li>
+          <li>Year-end summary reports</li>
+          <li>Teacher file archived</li>
+          <li>Optional: carry forward<br>to next academic year</li>
+          <li>Full audit trail preserved<br>for professional record</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot copper"></div>
+        <h3>Documentation as Single Source</h3>
+      </div>
+      <p>Model never goes outside uploaded docs. <strong>Time drifts — content does not.</strong> If a teacher uploads only "Algebra," the system produces output grounded in "Algebra" and nothing more. Full transparency: the system shows exactly what information it has and what is missing.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot amber"></div>
+        <h3>Model Tiers</h3>
+      </div>
+      <ul>
+        <li><strong>Tier 1 (8–14B):</strong> Scoring + gap reports</li>
+        <li><strong>Tier 2 (32–35B):</strong> Lessons, quizzes, pacing, remediation</li>
+        <li><strong>Tier 3 (70B+):</strong> Crystallization, MOY, clustering</li>
+        <li>Build for Tier 2 first — prove it on 32B local hardware.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot emerald"></div>
+        <h3>Student vs. Non-Student Split</h3>
+      </div>
+      <ul>
+        <li><strong>Frontier model:</strong> Crystallization, MOY generation, pre-assessments — batch jobs, non-student-facing</li>
+        <li><strong>Local model (Lenovo):</strong> Lesson delivery, quiz scoring, misconception tagging — student-facing</li>
+        <li><strong>Deterministic:</strong> Mastery scoring — <strong>never AI</strong></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot cyan"></div>
+        <h3>Audit Log — Non-Negotiable</h3>
+      </div>
+      <ul>
+        <li>Every teacher action modifying state is <strong>recorded</strong></li>
+        <li>Crystallization approved? <strong>Logged.</strong></li>
+        <li>Lesson bundle accepted? <strong>Logged.</strong></li>
+        <li>Pacing adjusted? <strong>Logged with reason.</strong></li>
+        <li>Protects the teacher <strong>and</strong> the system.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="footer">
+    Choros · χορός · Cohort AI Teacher · github.com/mbufkin/choros
+  </p>
+
+</body>
+</html>
