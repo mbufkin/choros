@@ -39,6 +39,7 @@ Split from [Phren](https://github.com/mbufkin/phren) — same zero-build archite
 |-----|---------|
 | [PRODUCT.md](PRODUCT.md) | Product intent, phases, core principles, non-goals |
 | [DESIGN.md](DESIGN.md) | Visual identity, color tokens, interaction model, system principles |
+| [DECISIONS.md](DECISIONS.md) | Design decisions: decided, deferred, open questions |
 | [MODELS.md](MODELS.md) | Hardware tiers: what each model size can do |
 | [AGENTS.md](AGENTS.md) | Operating manual for coding agents |
 | [ROADMAP.md](ROADMAP.md) | Now / Next / Later / Not Yet |
