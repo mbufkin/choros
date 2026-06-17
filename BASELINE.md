@@ -40,8 +40,19 @@ With these two buckets (district + curriculum), the crystallization engine shoul
 - Gaps flagged where the curriculum and district calendar conflict
 - Checkpoint suggestions aligned to grading period boundaries
 
+### guardrails/ — Scoring & Misconception Ground Truth
+
+| File | Source | Description |
+|------|--------|-------------|
+| `asap-aes-test-set.tsv` | Hewlett Foundation ASAP-AES | 5 student essays with human scores (2-12 scale), curated across score range |
+| `staar-alg1-test-items.json` | TEA STAAR Algebra 1 EOC (modeled) | 7 multiple-choice items with correct answers and distractor rationales, TEKS-aligned |
+
+See [docs/guardrail-data-sources.md](docs/guardrail-data-sources.md) for full documentation, scale-up instructions, and how these connect to Choros scoring features.
+
 ## First run target
 
 Run crystallization against this baseline, then put the resulting report in front of:
 1. Emily (pediatrician — understands learning variability)
 2. A real DISD CTE teacher (domain expert who can spot curriculum gaps)
+
+Before any real student data enters Choros, run a guardrail calibration pass: score the 5 ASAP essays + answer the 7 STAAR items, compare against ground truth, and flag divergences. This establishes the scoring baseline.
