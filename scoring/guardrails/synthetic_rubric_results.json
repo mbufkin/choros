@@ -1,0 +1,46 @@
+{
+  "model": "gemma4:26b",
+  "timestamp": "2026-06-20T22:10:21Z",
+  "summary": {
+    "perfect": 1,
+    "total": 5,
+    "mae": 2.4
+  },
+  "results": [
+    {
+      "id": "synth-01",
+      "expected": 1,
+      "checked": 1,
+      "error": 0,
+      "elapsed_s": 24.8
+    },
+    {
+      "id": "synth-03",
+      "expected": 3,
+      "checked": 6,
+      "error": 3,
+      "elapsed_s": 18.2
+    },
+    {
+      "id": "synth-05",
+      "expected": 7,
+      "checked": 10,
+      "error": 3,
+      "elapsed_s": 21.4
+    },
+    {
+      "id": "synth-07",
+      "expected": 7,
+      "checked": 12,
+      "error": 5,
+      "elapsed_s": 23.9
+    },
+    {
+      "id": "synth-11",
+      "expected": 11,
+      "checked": 12,
+      "error": 1,
+      "elapsed_s": 27.0
+    }
+  ]
+}

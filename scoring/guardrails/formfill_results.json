@@ -1,0 +1,66 @@
+{
+  "model": "gemma4:26b",
+  "timestamp": "2026-06-20T22:05:04Z",
+  "results": [
+    {
+      "id": "asap-belowbasic-01",
+      "human_score": 2,
+      "level": "Below Basic",
+      "checked": 1,
+      "unchecked": 12,
+      "total_criteria": 13,
+      "score_pct": 7.7,
+      "expected_checks": 2,
+      "notes": "The student clearly identifies their stance (against uniforms), but the submission lacks the fundamental components of an essay. There is no structural organization (no intro, body, or conclusion), no supporting evidence or examples, and no acknowledgment of the opposing side. Additionally, there are significant mechanical errors in spelling (\"fare\" instead of fair, \"ware\" instead of wear) and capitalization.",
+      "elapsed_s": 22.6
+    },
+    {
+      "id": "asap-belowbasic-02",
+      "human_score": 3,
+      "level": "Below Basic",
+      "checked": 6,
+      "unchecked": 7,
+      "total_criteria": 13,
+      "score_pct": 46.2,
+      "expected_checks": 3,
+      "notes": "The student clearly states their stance and provides reasons (cost and personal preference). However, the essay lacks structural depth; there are no paragraph breaks to separate ideas, and no counter-argument is addressed. There are also significant spelling and usage errors (\"cloths\" instead of \"clothes\" and \"to\" instead of \"too\") that impact the mechanics score.",
+      "elapsed_s": 25.0
+    },
+    {
+      "id": "asap-basic-03",
+      "human_score": 6,
+      "level": "Basic",
+      "checked": 11,
+      "unchecked": 2,
+      "total_criteria": 13,
+      "score_pct": 84.6,
+      "expected_checks": 6,
+      "notes": "The student successfully follows the structural requirements of an argumentative essay, including a clear thesis, a rebuttal, and a conclusion. The writing is grammatically sound. However, to improve, the student needs to move beyond general claims and provide \"concrete examples\" (e.g., a specific instance or anecdote) and \"evidence\" (e.g., statistics or citations) to support their reasoning. Currently, the essay relies entirely on logical assertion rather than empirical support.",
+      "elapsed_s": 19.2
+    },
+    {
+      "id": "asap-proficient-04",
+      "human_score": 8,
+      "level": "Proficient",
+      "checked": 13,
+      "unchecked": 0,
+      "total_criteria": 13,
+      "score_pct": 100.0,
+      "expected_checks": 9,
+      "notes": "The student wrote a very strong, concise essay. It successfully integrates specific data (the $249 figure) and cites a source, which elevates the argument from opinion to evidence-based. The transition into the counter-argument is smooth, and the student provides a \"middle ground\" solution, which serves as an effective way to conclude the rebuttal.",
+      "elapsed_s": 18.3
+    },
+    {
+      "id": "asap-advanced-05",
+      "human_score": 11,
+      "level": "Advanced",
+      "checked": 13,
+      "unchecked": 0,
+      "total_criteria": 13,
+      "score_pct": 100.0,
+      "expected_checks": 12,
+      "notes": "This is an exceptionally strong essay. The student uses sophisticated vocabulary and complex sentence structures effectively. The use of specific citations (Brunsma and Rockquemore; Department of Education) and concrete numerical data ($700 annually) provides high-level empirical support that elevates the argument beyond mere opinion. The rebuttal of the economic counter-argument is particularly well-executed.",
+      "elapsed_s": 15.1
+    }
+  ]
+}
