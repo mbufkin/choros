@@ -16,7 +16,7 @@ The paper that validated our form-fill approach. Three-stage pipeline:
 
 Key results on ASAP 2.0 (essay scoring): QWK 0.72 vs 0.48 direct holistic. Identifies three failure modes we independently hit: rubric execution drift, unverifiable score attribution, human-scale misalignment.
 
-**What we stole:** Evidence grounding requirement (quote the text that justifies each checkbox), 3-value decisions (0/1/2), post-hoc calibration instead of raw counting.
+**What we took from it:** Evidence grounding requirement (quote the text that justifies each checkbox), 3-value decisions (0/1/2), post-hoc calibration instead of raw counting.
 
 ---
 
@@ -32,7 +32,7 @@ Key findings:
 - Bias detectable with as few as N=5 samples on LOC traits
 - Bias-correction-first deployment: estimate systematic offsets from small human-labeled sets
 
-**What we stole:** Cross-dataset comparison methodology, N_min for bias detection, keyword vs guidelines prompt strategy.
+**What we took from it:** Cross-dataset comparison methodology, N_min for bias detection, keyword vs guidelines prompt strategy.
 
 **Key difference:** They found models are TOO HARSH (negative bias). We found models are TOO LENIENT (walk-down, positive bias). Different model families produce different bias directions.
 
@@ -43,7 +43,7 @@ Key findings:
 
 Compares open vs closed LLMs for AES. Finds that open models can approach closed-model performance for essay scoring when properly prompted.
 
-**What we stole:** Validation that open-weight models (our approach) are viable for this task.
+**What we took from it:** Validation that open-weight models (our approach) are viable for this task.
 
 ---
 
@@ -52,7 +52,7 @@ Compares open vs closed LLMs for AES. Finds that open models can approach closed
 
 Compares prompting techniques vs preference optimization for AES. Preference optimization outperforms prompting for English L2 writing assessment.
 
-**What we stole:** Confirmation that prompting strategy matters enormously — consistent with our Kappa -0.042 to 0.318 swing from prompt changes alone.
+**What we took from it:** Confirmation that prompting strategy matters enormously — consistent with our Kappa -0.042 to 0.318 swing from prompt changes alone.
 
 ---
 
@@ -77,7 +77,7 @@ All talks transcribed via Whisper on Lenovo, processed by gemma4:26b into struct
 
 LLM Exam Grader with three approaches: rubric (with match types), comparative, consistency checker. GPT-5-mini via API. Architecture demo — no empirical results.
 
-**What we stole:** Match types for rubric criteria (EXACT/EXPLICIT/EQUIVALENT/SEMANTIC), confidence flags per criterion, consistency checker concept.
+**What we took from it:** Match types for rubric criteria (EXACT/EXPLICIT/EQUIVALENT/SEMANTIC), confidence flags per criterion, consistency checker concept.
 
 ---
 
@@ -86,7 +86,7 @@ LLM Exam Grader with three approaches: rubric (with match types), comparative, c
 
 ASAP dataset, few-shot prompting with LangChain, 4-dimension scoring (Ideas/Organization/Style/Conventions), quadratic weighted Kappa, Nemotron 30B via API.
 
-**What we stole:** Confirmation that ASAP dataset + Kappa is the standard approach. They use Kappa as a success metric; we treat low Kappa as the research question.
+**What we took from it:** Confirmation that ASAP dataset + Kappa is the standard approach. They use Kappa as a success metric; we treat low Kappa as the research question.
 
 ---
 
@@ -95,7 +95,7 @@ ASAP dataset, few-shot prompting with LangChain, 4-dimension scoring (Ideas/Orga
 
 Presentation series on LLM-as-judge biases, mitigation strategies, eval frameworks. Educational resource, not experimental code.
 
-**What we stole:** Survey of the bias landscape — positional, verbosity, self-preference, sycophancy.
+**What we took from it:** Survey of the bias landscape — positional, verbosity, self-preference, sycophancy.
 
 ---
 
