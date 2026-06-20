@@ -1,0 +1,46 @@
+{
+  "model": "gemma4:26b",
+  "timestamp": "2026-06-20T21:30:04Z",
+  "results": [
+    {
+      "id": "asap-belowbasic-01",
+      "human_score": 2,
+      "level": "Below Basic",
+      "word_count": 181,
+      "feedback": "You clearly stated your position right at the beginning, so I know exactly which side you are on regarding school uniforms.\n\nHowever, this is much too short to be considered an essay. Right now, you have only shared your opinion, but you haven't provided any reasons or evidence to support it. To turn this into a real essay, you need to explain the \"why\" behind your thoughts. For example, when you say it is \"not fair,\" tell me why that is. Does wearing uniforms stop students from expressing their creativity? Does it make students feel less like individuals? Adding specific examples will help convince your reader.\n\nYou also need to work on your spelling and grammar. You used the word \"fare\" when you meant \"fair,\" and \"ware\" instead of \"wear.\" Also, remember that whenever you use the word \"I\" to talk about yourself, it must always be capitalized. \n\nTo improve this, try to add at least two or three more sentences that give specific reasons for your opinion, and then try to write a concluding sentence to wrap up your thoughts.",
+      "elapsed_s": 20.8
+    },
+    {
+      "id": "asap-belowbasic-02",
+      "human_score": 3,
+      "level": "Below Basic",
+      "word_count": 257,
+      "feedback": "You made your position very clear right from the first sentence, which is a good way to start an argumentative essay. I also think you identified a strong point when you mentioned that \"uniforms cost too much money.\" Financial impact is a very important part of this debate and a great argument to use.\n\nHowever, most of your essay relies on personal feelings rather than persuasive arguments. Saying things like \"I like to pick my own cloths\" or \"they are ugly\" doesn't really convince a reader who might disagree with you. To make this stronger, try to move away from what *you* think and focus on how uniforms affect *all* students. For example, instead of saying they are \"ugly,\" you could argue that wearing your own clothes allows students to express their individuality and creativity.\n\nYou also need to expand on your ideas. The point about it being a \"free country\" is a big statement, but you didn't explain how school clothing rules take away that freedom. You should try to connect your ideas more clearly. Also, when you mention cost, instead of just saying \"my mom says,\" try to explain why high costs are a problem for families in general.\n\nLastly, keep an eye on your spelling and grammar. You wrote \"cloths\" when you meant \"clothes,\" and you used \"to much\" instead of \"too much.\" \n\nTo improve this, I want you to pick one of your points\u2014like the cost or self-expression\u2014and try to write three sentences explaining *why* that point matters to everyone, not just yourself.",
+      "elapsed_s": 19.8
+    },
+    {
+      "id": "asap-basic-03",
+      "human_score": 6,
+      "level": "Basic",
+      "word_count": 238,
+      "feedback": "You did a good job of making your opinion very clear from the very first sentence. I also liked that you didn't just focus on your own side; when you wrote, \"While this is a fair point, I think schools can have a dress code,\" you showed that you are thinking about the other side of the argument. This makes your writing much more persuasive.\n\nHowever, right now, your essay feels more like an outline than a full piece of writing. Each of your points is very brief and needs much more development. \n\nFor example, when you say \"uniforms are expensive,\" you could explain *why* they are a burden. Do parents have to buy two separate wardrobes\u2014one for school and one for the weekend? Does this create extra stress during back-to-school season? Adding these kinds of details would make your argument much stronger.\n\nSimilarly, when you mention that clothing helps students \"feel more confident and comfortable,\" try to expand on that. You could give an example of how being able to wear a favorite shirt might help a student feel ready for the day, or how a strict uniform might make someone feel restricted.\n\nTo improve this, I want you to take each of your main points and try to add at least two more sentences of explanation or a specific example to each one. Don't just tell me *what* you think; show me *why* you think it.",
+      "elapsed_s": 14.7
+    },
+    {
+      "id": "asap-proficient-04",
+      "human_score": 8,
+      "level": "Proficient",
+      "word_count": 322,
+      "feedback": "You did a really good job with this piece. Your writing is clear, organized, and very easy to follow.\n\nOne of the biggest strengths of this essay is how you used evidence to support your claims. When you mentioned that \"the average cost of school uniforms is approximately $249 per child per year,\" it gave your argument about financial burden a lot of weight. It\u2019s much harder for a reader to disagree with a point when you provide specific, concrete numbers like that.\n\nI also want to commend you on how you handled the opposing view. A lot of writers just ignore the \"other side,\" but you acknowledged that uniforms can \"reduce bullying based on clothing brands.\" By bringing up those benefits and then offering a \"middle ground\" (the flexible dress code), you made your argument much more sophisticated and persuasive. It shows you\u2019ve really thought about the complexity of the issue.\n\nTo take this to the next level, I would suggest expanding on your ideas. Right now, the essay feels a bit brief\u2014it moves very quickly from one point to the next. For example, in your paragraph about individuality, you mention that \"adolescence is a critical period for identity development.\" This is a powerful point, but it could use more depth. You might consider adding an example of how clothing helps a student express themselves or why suppressing that expression might be harmful in a school setting.\n\nAdditionally, your idea for a \"flexible dress code\" is excellent, but you tucked it into the end of a paragraph. I would recommend making that its own section. You could use a whole paragraph to explain how a flexible dress code specifically solves the problems you raised (like cost and identity) while still preventing the issues like \"offensive imagery.\"\n\nOverall, this is a very strong, logical piece of writing. If you work on expanding your supporting details, your arguments will be even more impactful.",
+      "elapsed_s": 19.3
+    },
+    {
+      "id": "asap-advanced-05",
+      "human_score": 11,
+      "level": "Advanced",
+      "word_count": 330,
+      "feedback": "This is a very impressive piece of writing. You\u2019ve taken a topic that can often feel quite simple and elevated it into a sophisticated argument about economics, sociology, and civic duty.\n\n**What you did well:**\n\nYour use of evidence is excellent. Instead of just saying uniforms are expensive, you used a specific figure\u2014\"this dual wardrobe requirement can add over $700 annually to their budget\"\u2014which makes your economic argument much more persuasive and grounded in reality. \n\nI also really liked your philosophical approach toward the end of the essay. Your point that uniform policies teach students to \"eliminate visible differences entirely\" rather than learning how to \"navigate and respect\" them is a very deep, insightful observation. It moves the conversation beyond just \"what we wear\" and into \"how we learn to live in a society,\" which is exactly what a strong persuasive essay should do.\n\nThe structure of your argument is also very logical. You move smoothly from the practical (money) to the academic (grades/behavior) to the ideological (identity), which helps build momentum as the reader progresses through your points.\n\n**Areas for improvement:**\n\nWhile your writing is very polished, the introduction is quite dense. Using phrases like \"fundamental tensions between institutional order and individual liberty\" right out of the gate can feel a bit heavy for the reader. You might consider starting with a slightly more accessible \"hook\" to draw the reader in before diving into such complex academic language.\n\nAdditionally, while you do mention the arguments used by proponents of uniforms, I think your argument would be even stronger if you spent a little more time engaging with their most valid points. For example, you touch on safety and decency in your conclusion, but addressing the specific \"safety\" or \"bullying\" arguments more directly in the body of your essay\u2014and then systematically debunking them\u2014would make your rebuttal feel even more airtight.\n\nOverall, this was a pleasure to read. You have a great command of tone and a very clear, persuasive voice.",
+      "elapsed_s": 18.7
+    }
+  ]
+}
