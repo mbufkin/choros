@@ -21,14 +21,19 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [x] Cohen's Kappa + compression ratio metrics
 - [x] Feedback audit — remove scoring, measure feedback quality
 - [x] Two-pass experiment — prove bias lives in the scorer, not the observer
+- [x] Form-fill experiment — model fills rubric checklist, Python computes score (independently converged on Rulers approach)
+- [x] Synthetic rubric validation — test against known criterion counts
+- [x] Academic landscape survey — papers, repos, conference talks cataloged (`docs/inspiration.md`)
 - [x] Full journey documentation (`docs/scoring-bias-experiment.md`)
-- [ ] **Match types for rubric criteria** — EXACT / EXPLICIT / EQUIVALENT / SEMANTIC (from Laeyerz). Tells the model HOW strictly to match each rubric point, not just WHAT to look for.
-- [ ] **Confidence flags per criterion** — Low-confidence rubric points get flagged for teacher review. Human-in-the-loop hook.
-- [ ] **Consistency checker** — third grader axis. Does the student's answer hold together internally? Are the steps logically consistent? Complements rubric + comparative.
-- [ ] **Pairwise comparison experiment** — JudgmentBench showed comparative judgment beats rubrics for high-judgment domains. Run gemma4 in pairwise mode against our 5 essays + STAAR items.
-- [ ] **Prompt sensitivity audit** — we saw Kappa swing from -0.042 to 0.318 on prompt changes alone. Systematically map what wording changes affect bias.
-- [ ] **Cross-family model test** — does a different model family (Claude via API, or a non-Gemma local model) exhibit the same walk-down mechanism?
-- [ ] **STAAR item guardrail pass** — score 7 STAAR Algebra 1 items against ground truth, flag divergences (per BASELINE.md)
+- [ ] **Rulers-style evidence grounding** — for each checked criterion, model must QUOTE the text that justifies it. Python verifies quote exists in source. Blocks checkbox leniency. (Hong et al., 2026)
+- [ ] **3-value checklist decisions** — 0 (absent) / 1 (partial) / 2 (clear) instead of binary [ ]/[x]. Matches Rulers design.
+- [ ] **Post-hoc calibration layer** — ridge regression maps checklist signals to human score distribution. Replace raw checkbox counting. (Hong et al., 2026)
+- [ ] **Match types for rubric criteria** — EXACT / EXPLICIT / EQUIVALENT / SEMANTIC (from Laeyerz). Tells the model HOW strictly to match each rubric point.
+- [ ] **Confidence flags per criterion** — Low-confidence decisions flagged for teacher review.
+- [ ] **Consistency checker** — third grader axis. Does the student's answer hold together internally?
+- [ ] **Pairwise comparison experiment** — JudgmentBench showed comparative beats rubrics for high-judgment domains.
+- [ ] **Prompt sensitivity audit** — map what prompt wording changes affect bias (we saw -0.042 to 0.318).
+- [ ] **STAAR item guardrail pass** — score 7 STAAR Algebra 1 items against ground truth.
 
 ## Next (Post-POC)
 
