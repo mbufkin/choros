@@ -35,7 +35,7 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://100.85.15.59:11434")
-MODEL = os.environ.get("CHOROS_MODEL", "gemma4:26b")
+MODEL = os.environ.get("CHOROS_MODEL", "qwen3.6:35b-a3b")
 DATA_DIR = Path(__file__).resolve().parent / "guardrails"
 ESSAYS_PATH = DATA_DIR / "essays.json"
 RESULTS_PATH = DATA_DIR / "calibration_results.json"
@@ -128,7 +128,7 @@ ESSAY:
 
 Does this essay meet this criterion? Answer YES or NO only."""
 
-        response = ollama_generate(prompt, temperature=0.1, num_predict=200)
+        response = ollama_generate(prompt, temperature=0.1, num_predict=512)
         # Accept any leading case-insensitive YES/NO
         first_word = response.strip().upper()
         # Extract first token
