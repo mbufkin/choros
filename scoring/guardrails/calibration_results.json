@@ -1,0 +1,163 @@
+{
+  "model": "phi4:latest",
+  "timestamp": "2026-06-20T20:28:05Z",
+  "human_scores": {
+    "asap-belowbasic-01": 2,
+    "asap-belowbasic-02": 3,
+    "asap-basic-03": 6,
+    "asap-proficient-04": 8,
+    "asap-advanced-05": 11
+  },
+  "strategies": {
+    "A_holistic": {
+      "label": "Holistic (baseline)",
+      "kappa": 0.13,
+      "human_range": [
+        2,
+        11
+      ],
+      "model_range": [
+        3,
+        11
+      ],
+      "compression_ratio": 0.889,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 3,
+          "delta": 1,
+          "elapsed_s": 2.6
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 2.4
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 9,
+          "delta": 3,
+          "elapsed_s": 2.6
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 10,
+          "delta": 2,
+          "elapsed_s": 2.8
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 11,
+          "delta": 0,
+          "elapsed_s": 4.9
+        }
+      ]
+    },
+    "B_binary": {
+      "label": "Binary Agents (PReMISE/EACL)",
+      "kappa": 0.13,
+      "human_range": [
+        2,
+        11
+      ],
+      "model_range": [
+        3,
+        12
+      ],
+      "compression_ratio": 1.0,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 3,
+          "delta": 1,
+          "elapsed_s": 1.5
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 3,
+          "delta": 0,
+          "elapsed_s": 1.5
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 12,
+          "delta": 6,
+          "elapsed_s": 1.8
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 12,
+          "delta": 4,
+          "elapsed_s": 2.3
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 12,
+          "delta": 1,
+          "elapsed_s": 2.9
+        }
+      ]
+    },
+    "C_noncomp": {
+      "label": "Non-Compensation (PReMISE)",
+      "kappa": 0.091,
+      "human_range": [
+        2,
+        11
+      ],
+      "model_range": [
+        3,
+        11
+      ],
+      "compression_ratio": 0.889,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 3,
+          "delta": 1,
+          "elapsed_s": 2.7
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 2.1
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 8,
+          "delta": 2,
+          "elapsed_s": 2.4
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 9,
+          "delta": 1,
+          "elapsed_s": 2.9
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 11,
+          "delta": 0,
+          "elapsed_s": 2.9
+        }
+      ]
+    }
+  }
+}
