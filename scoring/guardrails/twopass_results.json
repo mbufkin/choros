@@ -1,0 +1,132 @@
+{
+  "model": "gemma4:26b",
+  "timestamp": "2026-06-20T21:33:56Z",
+  "modes": {
+    "A_direct": {
+      "label": "Direct (essay only)",
+      "kappa": -0.042,
+      "compression_ratio": 1.0,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 3,
+          "delta": 1,
+          "elapsed_s": 18.8
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 11.7
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 7,
+          "delta": 1,
+          "elapsed_s": 14.2
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 9,
+          "delta": 1,
+          "elapsed_s": 12.1
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 12,
+          "delta": 1,
+          "elapsed_s": 13.1
+        }
+      ]
+    },
+    "B_blind": {
+      "label": "Blind (feedback only)",
+      "kappa": 0.348,
+      "compression_ratio": 0.778,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 4,
+          "delta": 2,
+          "elapsed_s": 13.8
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 5,
+          "delta": 2,
+          "elapsed_s": 31.1
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 6,
+          "delta": 0,
+          "elapsed_s": 33.6
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 9,
+          "delta": 1,
+          "elapsed_s": 20.9
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 11,
+          "delta": 0,
+          "elapsed_s": 33.9
+        }
+      ]
+    },
+    "C_informed": {
+      "label": "Informed (essay + feedback)",
+      "kappa": 0.348,
+      "compression_ratio": 0.778,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 4,
+          "delta": 2,
+          "elapsed_s": 21.2
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 16.7
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 6,
+          "delta": 0,
+          "elapsed_s": 20.7
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 9,
+          "delta": 1,
+          "elapsed_s": 17.7
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 11,
+          "delta": 0,
+          "elapsed_s": 19.3
+        }
+      ]
+    }
+  }
+}
