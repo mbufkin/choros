@@ -269,32 +269,34 @@ def validate_evidence(essay_text: str, quote: str, evidence_type: str) -> bool:
 
 
 def score_evidence_checklist(essay_text: str) -> dict | None:
-    """Strategy D: Evidence extraction + Python-determined scoring.
+    """Strategy D: Model fills out a form. Python reads the boxes and counts.
 
-    The model's ONLY job is to find and quote evidence. Python:
-      1. Verifies each quote is a verbatim substring of the essay
-      2. Evaluates whether each criterion is met with deterministic rules
-      3. Computes the score — the model has zero influence on scoring
-    
-    Returns dict with python_score, evidence_valid, decisions, raw_response.
+    The model checks [x] met, [/] partial, or [ ] not met for each criterion
+    and provides evidence. Python:
+      1. Reads which box the model checked (0, 1, or 2)
+      2. Verifies the evidence quote is a verbatim substring of the essay
+      3. Counts the checked boxes — that's the score
+      4. Python does NOT judge quality — just reads the form and counts
     """
     import re, json as _json
 
-    # ── Build prompt: model extracts evidence, DOES NOT score ──
-    criteria_text = ""
+    # ── Build the checklist form ──
+    criteria_lines = ""
     for i, c in enumerate(CHECKLIST_CRITERIA, 1):
-        criteria_text += (
+        criteria_lines += (
             f"{i}. **{c['label']}** — {c['question']}\n"
+            f"   [ ] Not met   [/] Partial   [x] Met\n\n"
         )
 
-    prompt = f"""You are extracting evidence from a student essay.
-For each criterion below, find and quote the BEST piece of evidence from the essay.
-Do NOT judge or score — just find the most relevant text.
+    prompt = f"""You are evaluating a student essay against a structured checklist.
+For each criterion, choose ONE: [x] Met, [/] Partial, or [ ] Not met.
+Then provide a short verbatim quote from the essay as evidence.
 
 CRITICAL RULES:
-- Copy quotes VERBATIM from the essay — do not paraphrase
-- If the essay truly has no evidence for a criterion, write "none" as the quote
-- Quote enough context to be meaningful (1-2 sentences if possible)
+- Evidence MUST be copied VERBATIM from the essay — do NOT paraphrase
+- If you check [ ] Not met, write "none" as the evidence
+- If you check [/] Partial, quote the partial evidence you found
+- Quote enough context to be meaningful (1-2 sentences)
 
 ESSAY:
 ---
@@ -302,7 +304,7 @@ ESSAY:
 ---
 
 CHECKLIST:
-{criteria_text}
+{criteria_lines}
 
 Respond in valid JSON ONLY — no other text:
 ```json
@@ -310,37 +312,21 @@ Respond in valid JSON ONLY — no other text:
   "criteria": [
     {{
       "id": "CLAIM",
-      "evidence": "verbatim quote from essay, or \"none\""
+      "check": "x",
+      "evidence": "verbatim quote from essay"
     }},
     {{
       "id": "EVIDENCE_COUNT",
+      "check": "/", 
       "evidence": "..."
     }},
-    {{
-      "id": "EVIDENCE_QUALITY",
-      "evidence": "..."
-    }},
-    {{
-      "id": "COUNTER",
-      "evidence": "..."
-    }},
-    {{
-      "id": "STRUCTURE",
-      "evidence": "..."
-    }},
-    {{
-      "id": "GRAMMAR",
-      "evidence": "..."
-    }},
-    {{
-      "id": "DEPTH",
-      "evidence": "..."
-    }}
+    ...all 7 criteria...
   ]
 }}
-```"""
+```
+Where "check" is "x" (met), "/" (partial), or " " (not met)."""
 
-    response = ollama_generate(prompt, temperature=0.2, num_predict=4096)
+    response = ollama_generate(prompt, temperature=0.2, num_predict=8192, timeout=180)
 
     # ── Parse JSON ──
     json_match = re.search(r'\{[\s\S]*\}', response)
@@ -359,30 +345,37 @@ Respond in valid JSON ONLY — no other text:
     if len(criteria_results) != len(CHECKLIST_CRITERIA):
         return None
 
-    # ── Python evaluates each criterion ──
+    # ── Python reads the boxes and counts ──
     decisions = []
     evidence_valid = []
     total_score = 0
 
     for i, result in enumerate(criteria_results):
         expected = CHECKLIST_CRITERIA[i]
+        check = result.get("check", " ").strip()
         quote = result.get("evidence", "").strip('"').strip()
-        
-        # Step 1: Verify evidence is real
+
+        # Model's checkbox → score
+        if check == "x":
+            model_score = 2
+        elif check == "/":
+            model_score = 1
+        else:
+            model_score = 0
+
+        # Verify evidence is real
         valid = validate_evidence(essay_text, quote, expected["evidence_type"])
-        
-        # Step 2: Python determines if criterion is met (0-2)
-        py_score = _python_evaluate(expected["id"], quote, essay_text, valid)
-        
+
         decisions.append({
             "id": expected["id"],
             "label": expected["label"],
+            "check": check,
+            "box_score": model_score,
             "evidence": quote,
             "evidence_valid": valid,
-            "python_score": py_score,
         })
         evidence_valid.append(valid)
-        total_score += py_score
+        total_score += model_score
 
     # Map 0-14 raw to 2-12 scale
     mapped = round(2 + (total_score * 10 / 14))
@@ -396,90 +389,6 @@ Respond in valid JSON ONLY — no other text:
         "decisions": decisions,
         "raw_response": response,
     }
-
-
-def _python_evaluate(criterion_id: str, quote: str, essay: str, valid: bool) -> int:
-    """Python evaluates whether a criterion is met — deterministic, no model generosity.
-    
-    Returns 0 (not met), 1 (partially met), or 2 (clearly met).
-    """
-    import re
-    
-    # Evidence doesn't exist → criterion not met
-    if not quote or not valid or quote.lower() in ("none", '"none"', "'none'"):
-        return 0
-    
-    quote_lower = quote.lower()
-    
-    if criterion_id == "CLAIM":
-        # Clear position statement present → 2, vague → 1
-        position_markers = ["i think", "i believe", "students should", "students should not",
-                           "i agree", "i disagree", "in my opinion", "i contend", "i argue"]
-        return 2 if any(m in quote_lower for m in position_markers) else 1
-    
-    elif criterion_id == "EVIDENCE_COUNT":
-        # Count distinct reasons/points in the evidence
-        sentences = [s.strip() for s in re.split(r'[.!?]+', quote) if len(s.strip()) > 3]
-        # Also check for list markers
-        list_items = len(re.findall(r'(?:first|second|third|finally|also|another|additionally)', quote_lower))
-        total_points = max(len(sentences), list_items)
-        if total_points >= 3: return 2
-        if total_points >= 1: return 1
-        return 0
-    
-    elif criterion_id == "EVIDENCE_QUALITY":
-        # Check for specific, concrete details
-        has_numbers = bool(re.search(r'\d+', quote))
-        has_proper = bool(re.search(r'[A-Z][a-z]+ [A-Z][a-z]+', quote))  # proper nouns
-        has_specifics = bool(re.search(r'(percent|dollars|\$|study|research|survey|data|'
-                                       r'example|instance|specifically|according to)', quote_lower))
-        score_bits = sum([has_numbers, has_proper, has_specifics])
-        return min(2, score_bits)
-    
-    elif criterion_id == "COUNTER":
-        # Check for counterargument acknowledgment
-        markers = ["however", "some people", "on the other hand", "although",
-                   "while it is true", "critics", "opponents", "admittedly",
-                   "concede", "granted", "some say", "others argue", "some argue",
-                   "proponents", "opposing", "counter"]
-        return 2 if any(m in quote_lower for m in markers) else 0
-    
-    elif criterion_id == "STRUCTURE":
-        # Check for organizational markers indicating intro/body/conclusion
-        intro = bool(re.search(r'\b(first|introduction|to begin|the question of)\b', quote_lower))
-        body = bool(re.search(r'\b(second|furthermore|moreover|additionally|for example|'
-                              r'because|therefore|also)\b', quote_lower))
-        conclusion = bool(re.search(r'\b(in conclusion|finally|to sum|therefore|thus|'
-                                    r'for these reasons|in summary)\b', quote_lower))
-        bits = sum([intro, body, conclusion])
-        return min(2, bits)
-    
-    elif criterion_id == "GRAMMAR":
-        # Check for obvious spelling/grammar errors in the evidence quote
-        common_misspellings = {
-            "cloths", "ware", "fare", "scho", "thay", "becuase", "alot", "thier",
-            "there" "their", "wich", "wont", "cant", "dont", "doesnt", "couldnt",
-            "shouldnt", "wouldnt", "its", "ur", "u", "r", "plz", "tho", "thru"
-        }
-        words = set(re.findall(r'\b\w+\b', quote_lower))
-        errors = sum(1 for w in words if w in common_misspellings)
-        # Invert: 0 errors = 2, 1-2 = 1, 3+ = 0
-        if errors == 0: return 2
-        if errors <= 2: return 1
-        return 0
-    
-    elif criterion_id == "DEPTH":
-        # Check for nuanced thinking markers
-        nuance = ["however", "although", "while", "on the other hand",
-                  "complex", "balance", "trade-off", "middle ground",
-                  "compromise", "context", "depends", "not simply", "beyond",
-                  "nevertheless", "nonetheless", "paradox", "tension"]
-        count = sum(1 for w in nuance if w in quote_lower)
-        if count >= 3: return 2
-        if count >= 1: return 1
-        return 0
-    
-    return 0
 
 
 # ---------------------------------------------------------------------------
