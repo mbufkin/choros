@@ -45,7 +45,7 @@ RESULTS_PATH = DATA_DIR / "calibration_results.json"
 # ---------------------------------------------------------------------------
 
 def ollama_generate(prompt: str, model: str = MODEL, temperature: float = 0.3,
-                    num_predict: int = 512, timeout: int = 120) -> str:
+                    num_predict: int = 2048, timeout: int = 120) -> str:
     """Call Ollama /api/generate, return response text."""
     import urllib.request, urllib.error
 
@@ -128,7 +128,7 @@ ESSAY:
 
 Does this essay meet this criterion? Answer YES or NO only."""
 
-        response = ollama_generate(prompt, temperature=0.1, num_predict=10)
+        response = ollama_generate(prompt, temperature=0.1, num_predict=200)
         # Accept any leading case-insensitive YES/NO
         first_word = response.strip().upper()
         # Extract first token
