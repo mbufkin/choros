@@ -99,6 +99,40 @@ Presentation series on LLM-as-judge biases, mitigation strategies, eval framewor
 
 ---
 
+### Rulers Implementation (luoluomei)
+**github.com/luoluomei/Rulers_0525**
+
+Open-source implementation of the Hong et al. (2026) Rulers paper. Clean, well-documented Python codebase. Key design patterns we can adopt:
+
+- **4 traits × 20 checklist items** with type-aware evidence rules
+- **4 evidence types**: local_quote (verbatim), span_level (paragraph), global_diagnostic (document-level), weakly_groundable (human review)
+- **Structured JSON output** via schema — trait scores, checklist decisions (0/1/2), confidence, evidence per trait
+- **Evidence validation**: quotes verified as verbatim substrings of source sentences
+- **Ridge regression calibration** with polynomial features + monotone quantile mapping
+- Designed for OpenAI-compatible API; adaptable to Ollama
+
+**What we took from it:** The evidence type taxonomy, checklist sizing (20 items), JSON schema design for structured scoring output, calibration layer architecture.
+
+---
+
+### ASAP-AES Benchmark (benhamner)
+**github.com/benhamner/ASAP-AES**
+
+Official evaluation metrics and benchmarks from the Hewlett Foundation's Automated Essay Scoring competition. Includes Quadratic Weighted Kappa implementation (R + Python) and a **length-only baseline** — predicts scores from character count + word count alone using a random forest.
+
+**What we took from it:** The length baseline is a critical sanity check. If an LLM scoring system can't outperform "longer essays get higher scores," it's not evaluating content. We should add this to our benchmark suite.
+
+---
+
+### Human Preferences (kaigani)
+**github.com/kaigani/human-preferences** · Created 2026-06-20
+
+Local-first tool for capturing personal A/B preferences as a dataset. Export as LLM-judge rubric or DPO fine-tuning set. Built on Stanford Human Preferences (SHP) schema. Maps directly to the JudgmentBench pairwise comparison approach.
+
+**What we took from it:** Pairwise preference collection workflow. Validates the comparative judgment direction we flagged from JudgmentBench.
+
+---
+
 ## Our Contributions
 
 What we did that none of these sources did:
