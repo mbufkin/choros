@@ -35,7 +35,7 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://100.85.15.59:11434")
-MODEL = os.environ.get("CHOROS_MODEL", "qwen3.6:35b-a3b")
+MODEL = os.environ.get("CHOROS_MODEL", "nemotron-cascade-2:latest")
 DATA_DIR = Path(__file__).resolve().parent / "guardrails"
 ESSAYS_PATH = DATA_DIR / "essays.json"
 RESULTS_PATH = DATA_DIR / "calibration_results.json"

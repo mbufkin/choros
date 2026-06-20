@@ -1,6 +1,6 @@
 {
-  "model": "qwen3.6:35b-a3b",
-  "timestamp": "2026-06-20T21:11:08Z",
+  "model": "nemotron-cascade-2:latest",
+  "timestamp": "2026-06-20T21:22:23Z",
   "human_scores": {
     "asap-belowbasic-01": 2,
     "asap-belowbasic-02": 3,
@@ -11,107 +11,57 @@
   "strategies": {
     "A_holistic": {
       "label": "Holistic (baseline)",
-      "kappa": 0.286,
+      "kappa": 0.13,
       "human_range": [
         2,
         11
       ],
       "model_range": [
         3,
-        11
+        9
       ],
-      "compression_ratio": 0.889,
+      "compression_ratio": 0.667,
       "scores": [
         {
           "id": "asap-belowbasic-01",
           "human": 2,
           "model": 3,
           "delta": 1,
-          "elapsed_s": 18.2
+          "elapsed_s": 3.6
         },
         {
           "id": "asap-belowbasic-02",
           "human": 3,
-          "model": 3,
-          "delta": 0,
-          "elapsed_s": 18.8
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 3.7
         },
         {
           "id": "asap-basic-03",
           "human": 6,
           "model": 7,
           "delta": 1,
-          "elapsed_s": 28.7
+          "elapsed_s": 4.4
         },
         {
           "id": "asap-proficient-04",
           "human": 8,
-          "model": 11,
-          "delta": 3,
-          "elapsed_s": 16.7
+          "model": 8,
+          "delta": 0,
+          "elapsed_s": 3.5
         },
         {
           "id": "asap-advanced-05",
           "human": 11,
-          "model": 11,
-          "delta": 0,
-          "elapsed_s": 22.3
+          "model": 9,
+          "delta": -2,
+          "elapsed_s": 2.6
         }
       ]
     },
     "B_binary": {
       "label": "Binary Agents (PReMISE/EACL)",
-      "kappa": 0.091,
-      "human_range": [
-        2,
-        11
-      ],
-      "model_range": [
-        3,
-        7
-      ],
-      "compression_ratio": 0.444,
-      "scores": [
-        {
-          "id": "asap-belowbasic-01",
-          "human": 2,
-          "model": 3,
-          "delta": 1,
-          "elapsed_s": 36.8
-        },
-        {
-          "id": "asap-belowbasic-02",
-          "human": 3,
-          "model": 3,
-          "delta": 0,
-          "elapsed_s": 35.1
-        },
-        {
-          "id": "asap-basic-03",
-          "human": 6,
-          "model": 7,
-          "delta": 1,
-          "elapsed_s": 38.3
-        },
-        {
-          "id": "asap-proficient-04",
-          "human": 8,
-          "model": 3,
-          "delta": -5,
-          "elapsed_s": 41.1
-        },
-        {
-          "id": "asap-advanced-05",
-          "human": 11,
-          "model": 5,
-          "delta": -6,
-          "elapsed_s": 42.8
-        }
-      ]
-    },
-    "C_noncomp": {
-      "label": "Non-Compensation (PReMISE)",
-      "kappa": 0.167,
+      "kappa": 0.13,
       "human_range": [
         2,
         11
@@ -125,36 +75,87 @@
         {
           "id": "asap-belowbasic-01",
           "human": 2,
-          "model": 5,
-          "delta": 3,
-          "elapsed_s": 24.1
+          "model": 3,
+          "delta": 1,
+          "elapsed_s": 12.0
         },
         {
           "id": "asap-belowbasic-02",
           "human": 3,
-          "model": null,
-          "error": true
+          "model": 3,
+          "delta": 0,
+          "elapsed_s": 14.2
         },
         {
           "id": "asap-basic-03",
           "human": 6,
-          "model": 5,
-          "delta": -1,
-          "elapsed_s": 28.4
+          "model": 12,
+          "delta": 6,
+          "elapsed_s": 12.6
         },
         {
           "id": "asap-proficient-04",
           "human": 8,
           "model": 10,
           "delta": 2,
-          "elapsed_s": 20.2
+          "elapsed_s": 14.2
         },
         {
           "id": "asap-advanced-05",
           "human": 11,
           "model": 12,
           "delta": 1,
-          "elapsed_s": 15.5
+          "elapsed_s": 12.6
+        }
+      ]
+    },
+    "C_noncomp": {
+      "label": "Non-Compensation (PReMISE)",
+      "kappa": 0.167,
+      "human_range": [
+        2,
+        11
+      ],
+      "model_range": [
+        4,
+        9
+      ],
+      "compression_ratio": 0.556,
+      "scores": [
+        {
+          "id": "asap-belowbasic-01",
+          "human": 2,
+          "model": 5,
+          "delta": 3,
+          "elapsed_s": 6.6
+        },
+        {
+          "id": "asap-belowbasic-02",
+          "human": 3,
+          "model": 4,
+          "delta": 1,
+          "elapsed_s": 8.0
+        },
+        {
+          "id": "asap-basic-03",
+          "human": 6,
+          "model": 5,
+          "delta": -1,
+          "elapsed_s": 6.7
+        },
+        {
+          "id": "asap-proficient-04",
+          "human": 8,
+          "model": 8,
+          "delta": 0,
+          "elapsed_s": 6.6
+        },
+        {
+          "id": "asap-advanced-05",
+          "human": 11,
+          "model": 9,
+          "delta": -2,
+          "elapsed_s": 6.8
         }
       ]
     }
