@@ -25,9 +25,10 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [x] Synthetic rubric validation — test against known criterion counts
 - [x] Academic landscape survey — papers, repos, conference talks cataloged (`docs/inspiration.md`)
 - [x] Full journey documentation (`docs/scoring-bias-experiment.md`)
-- [ ] **Rulers-style evidence grounding** — for each checked criterion, model must QUOTE the text that justifies it. Python verifies quote exists in source. Blocks checkbox leniency. (Hong et al., 2026)
-- [ ] **3-value checklist decisions** — 0 (absent) / 1 (partial) / 2 (clear) instead of binary [ ]/[x]. Matches Rulers design.
-- [ ] **Post-hoc calibration layer** — ridge regression maps checklist signals to human score distribution. Replace raw checkbox counting. (Hong et al., 2026)
+- [x] **Rulers-style evidence grounding** — model checks [x]/[/]/[ ] + provides verbatim quote. Python verifies quote exists in source. Tested across gemma4, phi4, qwen. (`calibrate.py` Strategy D)
+- [x] **3-value checklist decisions** — [x] met (2), [/] partial (1), [ ] not met (0). Model fills form, Python reads boxes and counts.
+- [x] **Post-hoc calibration layer** — ridge regression (poly deg 2) maps raw checklist counts → human score distribution. Best result: qwen3.6:35b ridge Kappa 0.545.
+- [x] **Cross-model form-fill benchmark** — gemma4 (0.091), phi4 (0.318), qwen (0.545) ridge Kappa. Phi4 10x faster than gemma4.
 - [ ] **Match types for rubric criteria** — EXACT / EXPLICIT / EQUIVALENT / SEMANTIC (from Laeyerz). Tells the model HOW strictly to match each rubric point.
 - [ ] **Confidence flags per criterion** — Low-confidence decisions flagged for teacher review.
 - [ ] **Consistency checker** — third grader axis. Does the student's answer hold together internally?
