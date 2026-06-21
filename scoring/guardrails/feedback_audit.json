@@ -42,5 +42,12 @@
       "feedback": "This is a very impressive piece of writing. You\u2019ve taken a topic that can often feel quite simple and elevated it into a sophisticated argument about economics, sociology, and civic duty.\n\n**What you did well:**\n\nYour use of evidence is excellent. Instead of just saying uniforms are expensive, you used a specific figure\u2014\"this dual wardrobe requirement can add over $700 annually to their budget\"\u2014which makes your economic argument much more persuasive and grounded in reality. \n\nI also really liked your philosophical approach toward the end of the essay. Your point that uniform policies teach students to \"eliminate visible differences entirely\" rather than learning how to \"navigate and respect\" them is a very deep, insightful observation. It moves the conversation beyond just \"what we wear\" and into \"how we learn to live in a society,\" which is exactly what a strong persuasive essay should do.\n\nThe structure of your argument is also very logical. You move smoothly from the practical (money) to the academic (grades/behavior) to the ideological (identity), which helps build momentum as the reader progresses through your points.\n\n**Areas for improvement:**\n\nWhile your writing is very polished, the introduction is quite dense. Using phrases like \"fundamental tensions between institutional order and individual liberty\" right out of the gate can feel a bit heavy for the reader. You might consider starting with a slightly more accessible \"hook\" to draw the reader in before diving into such complex academic language.\n\nAdditionally, while you do mention the arguments used by proponents of uniforms, I think your argument would be even stronger if you spent a little more time engaging with their most valid points. For example, you touch on safety and decency in your conclusion, but addressing the specific \"safety\" or \"bullying\" arguments more directly in the body of your essay\u2014and then systematically debunking them\u2014would make your rebuttal feel even more airtight.\n\nOverall, this was a pleasure to read. You have a great command of tone and a very clear, persuasive voice.",
       "elapsed_s": 18.7
     }
-  ]
+  ],
+  "_prompts": {
+    "library_version": "1.0.0",
+    "prompts_used": [
+      "feedback-blunt-teacher"
+    ],
+    "note": "Retroactively tagged 2026-06-21. Prompts matched from experiment source code analysis."
+  }
 }

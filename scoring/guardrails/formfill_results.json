@@ -62,5 +62,12 @@
       "notes": "This is an exceptionally strong essay. The student uses sophisticated vocabulary and complex sentence structures effectively. The use of specific citations (Brunsma and Rockquemore; Department of Education) and concrete numerical data ($700 annually) provides high-level empirical support that elevates the argument beyond mere opinion. The rebuttal of the economic counter-argument is particularly well-executed.",
       "elapsed_s": 15.1
     }
-  ]
+  ],
+  "_prompts": {
+    "library_version": "1.0.0",
+    "prompts_used": [
+      "checklist-form-fill"
+    ],
+    "note": "Retroactively tagged 2026-06-21. Prompts matched from experiment source code analysis."
+  }
 }

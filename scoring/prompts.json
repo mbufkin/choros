@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Canonical prompt library for Choros. Every experiment references a specific prompt ID + version. Changing a prompt requires bumping the version and re-baselining.",
+    "principle": "No experiment run uses an ad-hoc prompt. All prompts are loaded from this file."
+  },
+  "prompts": {
+    "feedback-blunt-teacher": {
+      "version": "1.0.0",
+      "description": "Blunt, no-sugar teacher feedback on a student essay. No scores, no rubrics, no grades. Just honest feedback with direct quotes.",
+      "source": "feedback_audit.py PROMPT",
+      "results_tagged": ["feedback_audit.json"],
+      "template": "You are a classroom teacher providing feedback on a student essay. The writing prompt was:\n\"{writing_prompt}\"\n\nRead the student's essay below and write the feedback you would give them. \n\nRules:\n- Write in plain English, like you're talking to the student\n- Point out specific strengths (quote the essay if helpful)\n- Point out specific weaknesses or things to improve\n- Be honest — don't praise if there's nothing to praise\n- If the essay is weak, say what's missing and how to fix it\n- No scores, no grades, no rubrics — just feedback\n\nESSAY:\n{essay}\n\nFEEDBACK:",
+      "parameters": {
+        "writing_prompt": "The essay prompt the student was given (e.g. 'Explain whether students should be required to wear uniforms.')",
+        "essay": "The full student essay text"
+      },
+      "defaults": {
+        "writing_prompt": "Explain whether students should be required to wear uniforms."
+      }
+    },
+    "rubric-uniform-holistic": {
+      "version": "1.0.0",
+      "description": "Holistic scoring rubric for the uniform debate prompt. 2-12 scale used by twopass_experiment and calibrate strategy A.",
+      "source": "twopass_experiment.py RUBRIC",
+      "results_tagged": ["twopass_results.json", "calibration_results.json"],
+      "template": "Scoring Rubric (2-12 scale):\n\n2-3 (Below Basic): No clear position, no evidence, major errors in mechanics.\n4-5 (Basic): Position stated but undeveloped, few details, weak organization.\n6-7 (Basic/Proficient): Clear position, some evidence, basic organization, some counter-argument.\n8-9 (Proficient): Strong position, specific evidence, good organization, addresses counter-argument.\n10-12 (Advanced): Sophisticated argument, compelling evidence, excellent organization, deep analysis.",
+      "parameters": {}
+    },
+    "scoring-direct": {
+      "version": "1.0.0",
+      "description": "Direct holistic scoring: rubric + essay → single integer score 2-12. Calibrate Strategy A.",
+      "source": "calibrate.py score_holistic()",
+      "results_tagged": ["calibration_results.json (A_holistic)"],
+      "template": "{rubric}\n\nSTUDENT ESSAY:\n{essay}\n\nGive a SINGLE INTEGER score from 2 to 12. Then explain your reasoning in 1-2 sentences.\nOutput format:\nSCORE: <integer>\nREASONING: <1-2 sentences>",
+      "parameters": {
+        "rubric": "The scoring rubric (use rubric-uniform-holistic)",
+        "essay": "The full student essay text"
+      }
+    },
+    "scoring-noncompensation": {
+      "version": "1.0.0",
+      "description": "Holistic scoring with PReMISE non-compensation clause: do not reward style if content is weak. Calibrate Strategy C.",
+      "source": "calibrate.py score_noncompensation()",
+      "results_tagged": ["calibration_results.json (C_noncomp)"],
+      "template": "You are grading a student essay on a 2-12 scale. The prompt was:\n\"{writing_prompt}\"\n\nCRITICAL RULES — READ CAREFULLY:\n1. The score must reflect the QUALITY OF THE ARGUMENT, not the quality of the writing.\n2. Do NOT reward good grammar, polite tone, or formal structure if the argument is weak or missing.\n3. A well-written essay with no evidence = LOW score. A rough essay with strong reasoning = HIGH score.\n4. If the essay makes no real argument, it cannot score above 4.\n5. If the essay lacks evidence or examples, it cannot score above 6.\n\nESSAY:\n{essay}\n\nGive a SINGLE INTEGER score from 2 to 12 following these rules.\nOutput format:\nSCORE: <integer>\nREASONING: <1-2 sentences>",
+      "parameters": {
+        "writing_prompt": "The essay prompt the student was given",
+        "essay": "The full student essay text"
+      },
+      "defaults": {
+        "writing_prompt": "Explain whether students should be required to wear uniforms."
+      }
+    },
+    "scoring-binary-agents": {
+      "version": "1.0.0",
+      "description": "Per-criterion binary YES/NO scoring. 6 criteria asked independently, then converted to 2-12 scale. Calibrate Strategy B. EACL 2026 approach.",
+      "source": "calibrate.py score_binary_agents()",
+      "results_tagged": ["calibration_results.json (B_binary)"],
+      "template": "You are evaluating ONE specific criterion of a student essay. Answer ONLY yes or no.\n\nCRITERION: {criterion_question}\n\nESSAY:\n{essay}\n\nDoes this essay meet this criterion? Answer YES or NO only.",
+      "parameters": {
+        "criterion_question": "One of 6 criteria questions (CLAIM, EVIDENCE, STRUCTURE, COUNTER, LANGUAGE, DEPTH)",
+        "essay": "The full student essay text"
+      },
+      "criteria": [
+        {"id": "CLAIM", "question": "Does the essay state a clear position on uniforms?"},
+        {"id": "EVIDENCE", "question": "Does the essay support its position with specific reasons or examples?"},
+        {"id": "STRUCTURE", "question": "Does the essay have a recognizable introduction, body, and conclusion?"},
+        {"id": "COUNTER", "question": "Does the essay acknowledge or respond to an opposing viewpoint?"},
+        {"id": "LANGUAGE", "question": "Is the writing mostly free of grammar and spelling errors?"},
+        {"id": "DEPTH", "question": "Does the essay show nuanced thinking beyond surface-level arguments?"}
+      ]
+    },
+    "scoring-two-pass-blind": {
+      "version": "1.0.0",
+      "description": "Two-pass scoring: rubric + feedback → score (essay HIDDEN from scorer). Tests whether scoring bias lives in the scorer, not the observer.",
+      "source": "twopass_experiment.py score_blind()",
+      "results_tagged": ["twopass_results.json (B_blind)"],
+      "template": "{rubric}\n\nA teacher reviewed a student essay and wrote this feedback:\n\nTEACHER FEEDBACK:\n{feedback}\n\nBased on the rubric and the teacher's feedback, what score (2-12) would you assign to the student's essay?\nGive a single integer score from 2 to 12.\nSCORE:",
+      "parameters": {
+        "rubric": "The scoring rubric (use rubric-uniform-holistic)",
+        "feedback": "The teacher feedback text (from feedback-blunt-teacher)"
+      }
+    },
+    "scoring-two-pass-informed": {
+      "version": "1.0.0",
+      "description": "Two-pass scoring: rubric + essay + feedback → score. Everything visible to scorer.",
+      "source": "twopass_experiment.py score_informed()",
+      "results_tagged": ["twopass_results.json (C_informed)"],
+      "template": "{rubric}\n\nSTUDENT ESSAY:\n{essay}\n\nTEACHER FEEDBACK ON THIS ESSAY:\n{feedback}\n\nBased on the rubric, the essay, and the feedback, give a single integer score from 2 to 12.\nSCORE:",
+      "parameters": {
+        "rubric": "The scoring rubric (use rubric-uniform-holistic)",
+        "essay": "The full student essay text",
+        "feedback": "The teacher feedback text (from feedback-blunt-teacher)"
+      }
+    },
+    "checklist-form-fill": {
+      "version": "1.0.0",
+      "description": "Form-fill rubric checklist: model fills [x]/[ ] checkboxes. Python reads boxes and counts. Independently converged on Rulers approach.",
+      "source": "formfill_experiment.py RUBRIC_FORM",
+      "results_tagged": ["formfill_results.json"],
+      "template": "## Essay Rubric — Uniform Debate\n\nRead the student essay below. For each criterion, mark [x] if the essay meets it.\nLeave it [ ] if it does not. Be strict — only check if clearly demonstrated.\n\n### Claim & Position\n- [ ] States a clear position on school uniforms\n- [ ] Position is maintained consistently\n\n### Evidence & Support\n- [ ] Provides at least one specific reason\n- [ ] Provides at least one concrete example\n- [ ] Uses data, statistics, or cited evidence\n\n### Organization\n- [ ] Has a recognizable introduction\n- [ ] Body paragraphs develop the argument\n- [ ] Has a conclusion that wraps up the position\n\n### Counter-Argument\n- [ ] Mentions or acknowledges an opposing viewpoint\n- [ ] Responds to or rebuts the opposing view\n\n### Mechanics\n- [ ] Spelling is mostly correct\n- [ ] Grammar and sentence structure are mostly correct\n- [ ] Capitalization and punctuation are standard\n\n### Notes (optional)\n<!-- Write any observations here. What did the student do well? What needs work? -->\n\nSTUDENT ESSAY:\n{essay}\n\nFill out the rubric above by marking [x] for criteria the essay meets.",
+      "parameters": {
+        "essay": "The full student essay text"
+      }
+    },
+    "checklist-evidence-grounded": {
+      "version": "1.0.0",
+      "description": "Rulers-style evidence-grounded checklist. Model fills [x]/[/]/[ ] + verbatim evidence quotes. Python verifies quotes exist in source. Calibrate Strategy D.",
+      "source": "calibrate.py score_evidence_checklist()",
+      "results_tagged": ["calibration_results.json (D_evidence)"],
+      "template": "You are evaluating a student essay against a structured checklist.\nFor each criterion, choose ONE: [x] Met, [/] Partial, or [ ] Not met.\nThen provide a short verbatim quote from the essay as evidence.\n\nCRITICAL RULES:\n- Evidence MUST be copied VERBATIM from the essay — do NOT paraphrase\n- If you check [ ] Not met, write \"none\" as the evidence\n- If you check [/] Partial, quote the partial evidence you found\n- Quote enough context to be meaningful (1-2 sentences)\n\nESSAY:\n---\n{essay}\n---\n\nCHECKLIST:\n{criteria_list}\n\nRespond in valid JSON ONLY — no other text:\n```json\n{\n  \"criteria\": [\n    {\"id\":\"CLAIM\",\"check\":\"x\",\"evidence\":\"verbatim quote from essay\"},\n    {\"id\":\"EVIDENCE_COUNT\",\"check\":\"/\",\"evidence\":\"...\"},\n    {\"id\":\"EVIDENCE_QUALITY\",\"check\":\" \",\"evidence\":\"none\"},\n    {\"id\":\"COUNTER\",\"check\":\" \",\"evidence\":\"none\"},\n    {\"id\":\"STRUCTURE\",\"check\":\" \",\"evidence\":\"none\"},\n    {\"id\":\"GRAMMAR\",\"check\":\" \",\"evidence\":\"none\"},\n    {\"id\":\"DEPTH\",\"check\":\" \",\"evidence\":\"none\"}\n  ]\n}\n```",
+      "parameters": {
+        "essay": "The full student essay text",
+        "criteria_list": "Formatted criteria list with [x]/[/]/[ ] markers (generated programmatically from CHECKLIST_CRITERIA)"
+      },
+      "criteria": [
+        {"id": "CLAIM", "label": "Position & Claim", "question": "Does the essay state a clear position on school uniforms?", "evidence_type": "local_quote", "max_points": 2},
+        {"id": "EVIDENCE_COUNT", "label": "Evidence Count", "question": "How many distinct reasons or examples support the position?", "evidence_type": "span_level", "max_points": 2},
+        {"id": "EVIDENCE_QUALITY", "label": "Evidence Quality", "question": "Are the reasons/examples specific and concrete (not vague generalities)?", "evidence_type": "local_quote", "max_points": 2},
+        {"id": "COUNTER", "label": "Counterargument", "question": "Does the essay acknowledge or respond to an opposing viewpoint?", "evidence_type": "local_quote", "max_points": 2},
+        {"id": "STRUCTURE", "label": "Structure", "question": "Does the essay have a recognizable introduction, body, and conclusion?", "evidence_type": "global", "max_points": 2},
+        {"id": "GRAMMAR", "label": "Grammar & Conventions", "question": "Is the writing mostly free of grammar, spelling, and punctuation errors?", "evidence_type": "global", "max_points": 2},
+        {"id": "DEPTH", "label": "Depth & Nuance", "question": "Does the essay show nuanced thinking beyond surface-level arguments?", "evidence_type": "global", "max_points": 2}
+      ]
+    },
+    "checklist-prompt-specific": {
+      "version": "1.0.0",
+      "description": "Prompt-specific rubric with keyword router. 7 locked rubrics for different essay topics. Two-pass: route → grade with non-comp clause.",
+      "source": "asap_rubrics.py + batch_prompt_specific.py",
+      "results_tagged": ["batch200_prompt_specific.txt"],
+      "template": "A student was given the following writing prompt:\n\nWRITING PROMPT:\n---\n{prompt_text}\n---\n\nThe student wrote this essay in response:\n\nSTUDENT ESSAY:\n---\n{essay}\n---\n\nYou are grading this essay against a rubric designed specifically for this prompt.\nFor each criterion, choose ONE: [x] Met, [/] Partial, or [ ] Not met.\nThen provide a short verbatim quote from the STUDENT ESSAY as evidence.\n\nCRITICAL RULES:\n- Evidence MUST be copied VERBATIM from the student essay (no paraphrasing)\n- If you check [ ] Not met, write \"none\" as the evidence\n\nNON-COMPENSATION RULES — DO NOT REWARD SURFACE FEATURES:\n- [ ] is the DEFAULT. [x] and [/] must be EARNED with real substance.\n- Good grammar or polite tone do NOT earn [x] if the argument/content is weak.\n- [x] requires CONCRETE, SPECIFIC content relevant to THIS PROMPT.\n- Do NOT give partial credit ([/]) to be polite. Use [ ] when the criterion is truly absent.\n\nFORMAT: Respond with JSON ONLY. Start with ```json and end with ```.\n\nRUBRIC:\n{criteria_lines}\n\nRespond in valid JSON:\n```json\n{{\"criteria\": [{criteria_json_template}]}}\n```",
+      "parameters": {
+        "prompt_text": "The original writing prompt the student was given",
+        "essay": "The full student essay text",
+        "criteria_lines": "Formatted criteria list with 7 items, each with label, question, and [x]/[/]/[ ] markers",
+        "criteria_json_template": "JSON template with one entry per criterion: {\"id\":\"...\",\"check\":\"x\",\"evidence\":\"...\"}"
+      }
+    },
+    "schema-enforced-json": {
+      "version": "1.0.0",
+      "description": "JSON Schema enforcement via llama.cpp GBNF grammar. Guarantees valid JSON output but kills model reasoning quality (Kappa drops vs prompt-only).",
+      "source": "batch_schema_enforced.py",
+      "results_tagged": ["batch20_schema_final.txt"],
+      "note": "This is a SCHEMA (structural constraint), not a prompt. The system prompt varies by experiment. Schema is immutable; the system_prompt that wraps it is the experimental variable.",
+      "json_schema": {
+        "type": "object",
+        "properties": {
+          "criteria": {
+            "type": "array",
+            "minItems": 7,
+            "maxItems": 7,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string", "enum": ["THESIS", "EVIDENCE_COUNT", "EVIDENCE_QUALITY", "COUNTER", "ORGANIZATION", "MECHANICS", "DEPTH"]},
+                "check": {"type": "string", "enum": ["x", "/", " "]},
+                "evidence": {"type": "string"}
+              },
+              "required": ["id", "check", "evidence"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": ["criteria"],
+        "additionalProperties": false
+      }
+    }
+  }
+}

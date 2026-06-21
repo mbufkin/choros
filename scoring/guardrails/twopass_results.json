@@ -128,5 +128,14 @@
         }
       ]
     }
+  },
+  "_prompts": {
+    "library_version": "1.0.0",
+    "prompts_used": [
+      "rubric-uniform-holistic",
+      "scoring-two-pass-blind",
+      "scoring-two-pass-informed"
+    ],
+    "note": "Retroactively tagged 2026-06-21. Prompts matched from experiment source code analysis."
   }
 }
