@@ -35,13 +35,15 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://100.85.15.59:11434")
+LLAMACPP_URL = os.environ.get("LLAMACPP_URL", "http://100.85.15.59:8080")
 MODEL = os.environ.get("CHOROS_MODEL", "gemma4:26b")
+BACKEND = os.environ.get("CHOROS_BACKEND", "llamacpp")  # "ollama" or "llamacpp"
 DATA_DIR = Path(__file__).resolve().parent / "guardrails"
 ESSAYS_PATH = DATA_DIR / "essays.json"
 RESULTS_PATH = DATA_DIR / "calibration_results.json"
 
 # ---------------------------------------------------------------------------
-# Ollama helper
+# Generation helpers (Ollama and llama.cpp CUDA)
 # ---------------------------------------------------------------------------
 
 def ollama_generate(prompt: str, model: str = MODEL, temperature: float = 0.3,
@@ -71,6 +73,98 @@ def ollama_generate(prompt: str, model: str = MODEL, temperature: float = 0.3,
         return f"[ERROR: {e}]"
 
 
+def llamacpp_generate(prompt: str, temperature: float = 0.3,
+                      n_predict: int = 2048, timeout: int = 120) -> str:
+    """Call llama.cpp CUDA server /v1/completions (OpenAI-compatible)."""
+    import urllib.request, urllib.error
+
+    payload = json.dumps({
+        "prompt": prompt,
+        "temperature": temperature,
+        "max_tokens": n_predict,
+        "stream": False,
+    }).encode()
+
+    req = urllib.request.Request(
+        f"{LLAMACPP_URL}/v1/completions",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read())
+            return data["choices"][0]["text"]
+    except Exception as e:
+        return f"[ERROR: {e}]"
+
+
+def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
+                         temperature: float = 0.3,
+                         n_predict: int = 2048, timeout: int = 120) -> str:
+    """Call llama.cpp CUDA server /v1/chat/completions.
+    
+    Uses chat template from GGUF metadata. For models with thinking/reasoning
+    (qwen3.6), thinking goes to reasoning_content and final answer to content.
+    Requires higher max_tokens because thinking consumes tokens first.
+    """
+    import urllib.request, urllib.error
+
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": user_prompt})
+
+    payload = json.dumps({
+        "messages": messages,
+        "temperature": temperature,
+        "max_tokens": n_predict,
+        "stream": False,
+    }).encode()
+
+    req = urllib.request.Request(
+        f"{LLAMACPP_URL}/v1/chat/completions",
+        data=payload,
+        headers={"Content-Type": "application/json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read())
+            msg = data["choices"][0]["message"]
+            # Prefer content; fall back to reasoning_content if content empty
+            content = msg.get("content", "")
+            if not content.strip():
+                content = msg.get("reasoning_content", "")
+            return content
+    except Exception as e:
+        return f"[ERROR: {e}]"
+
+
+def generate(prompt: str, temperature: float = 0.3,
+             num_predict: int = 2048, timeout: int = 120) -> str:
+    """Unified generation — routes to active backend (raw completions)."""
+    if BACKEND == "ollama":
+        return ollama_generate(prompt, temperature=temperature,
+                               num_predict=num_predict, timeout=timeout)
+    else:
+        return llamacpp_generate(prompt, temperature=temperature,
+                                 n_predict=num_predict, timeout=timeout)
+
+
+def generate_chat(system_prompt: str, user_prompt: str,
+                  temperature: float = 0.3,
+                  num_predict: int = 2048, timeout: int = 120) -> str:
+    """Generate via chat completions (for models needing template handling)."""
+    if BACKEND == "ollama":
+        # Fallback: concatenate into single prompt for ollama
+        prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
+        return ollama_generate(prompt, temperature=temperature,
+                               num_predict=num_predict, timeout=timeout)
+    else:
+        return llamacpp_chat_generate(system_prompt, user_prompt,
+                                      temperature=temperature,
+                                      n_predict=num_predict, timeout=timeout)
+
+
 # ---------------------------------------------------------------------------
 # Scoring strategies
 # ---------------------------------------------------------------------------
@@ -88,7 +182,7 @@ Output format:
 SCORE: <integer>
 REASONING: <1-2 sentences>"""
 
-    response = ollama_generate(prompt)
+    response = generate(prompt)
     # Extract score — try multiple patterns
     import re
     match = re.search(r'(?:SCORE|score|Score):\s*(\d+)', response)
@@ -128,7 +222,7 @@ ESSAY:
 
 Does this essay meet this criterion? Answer YES or NO only."""
 
-        response = ollama_generate(prompt, temperature=0.1, num_predict=512)
+        response = generate(prompt, temperature=0.1, num_predict=512)
         # Accept any leading case-insensitive YES/NO
         first_word = response.strip().upper()
         # Extract first token
@@ -169,7 +263,7 @@ Output format:
 SCORE: <integer>
 REASONING: <1-2 sentences>"""
 
-    response = ollama_generate(prompt)
+    response = generate(prompt)
     import re
     match = re.search(r'SCORE:\s*(\d+)', response)
     if match:
@@ -326,7 +420,7 @@ Respond in valid JSON ONLY — no other text:
 ```
 Where "check" is "x" (met), "/" (partial), or " " (not met)."""
 
-    response = ollama_generate(prompt, temperature=0.2, num_predict=8192, timeout=180)
+    response = generate(prompt, temperature=0.2, num_predict=8192, timeout=180)
 
     # ── Parse JSON ──
     json_match = re.search(r'\{[\s\S]*\}', response)
