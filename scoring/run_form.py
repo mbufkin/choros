@@ -99,10 +99,20 @@ for i, essay in enumerate(essays):
 For each criterion, choose ONE: [x] Met, [/] Partial, or [ ] Not met.
 Then provide a short verbatim quote from the essay as evidence.
 
-CRITICAL RULES:
-- Evidence MUST be copied VERBATIM from the essay
+CRITICAL RULES — YOU MUST FOLLOW THESE:
+- Evidence MUST be copied VERBATIM from the essay (no paraphrasing)
 - If you check [ ] Not met, write "none" as the evidence
 - Quote enough context (1-2 sentences)
+
+NON-COMPENSATION RULES — DO NOT REWARD SURFACE FEATURES:
+- [ ] is the DEFAULT. [x] and [/] must be EARNED with real substance.
+- Good grammar, polite tone, or formal structure do NOT earn [x] if the argument is weak.
+- [x] requires CONCRETE, SPECIFIC content — not just "the essay mentions a topic."
+- If the essay makes no real argument, CLAIM must be [ ].
+- If the essay lacks examples or data, EVIDENCE_COUNT must be [ ].
+- Do NOT give partial credit ([/]) to be polite. Use [ ] when the criterion is truly absent.
+
+FORMAT: Respond with JSON ONLY. No introduction, no explanation, no markdown outside the JSON block. Start your response with ```json and end with ```.
 
 ESSAY:
 ---
@@ -135,7 +145,7 @@ Respond in valid JSON ONLY:
     elif BACKEND == "llamacpp":
         # Use chat endpoint for better model template handling
         response = generate_chat(system_prompt, user_prompt,
-                                temperature=0.2, num_predict=4096, timeout=180)
+                                temperature=0.2, num_predict=32768, timeout=600)
         # Strip think tags if using raw completions fallback
         response = re.sub(r'<think>[\s\S]*?</think>', '', response).strip()
     else:
