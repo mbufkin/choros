@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Batch grade 200 ASAP essays with generic non-comp form-fill rubric.
-Uses gemma4-26b via CUDA llama.cpp server. ~8 hour run.
+Supports CUDA llama.cpp and NVIDIA NIM backends.
+
+Usage:
+  CHOROS_BACKEND=llamacpp python3 batch_grade.py [/tmp/asap200.json] [output.txt] [start_idx]
+  CHOROS_BACKEND=nvidia python3 batch_grade.py deepseek-ai/deepseek-v4-flash [/tmp/asap200.json] [output.txt] [start_idx]
 """
-import json, sys, time, re, os, csv
+import json, sys, time, re, os, urllib.request, urllib.error
 sys.path.insert(0, '.')
 
 from calibrate import generate_chat, validate_evidence, cohens_kappa, calibrate_ridge
@@ -33,10 +37,59 @@ GENERIC_CRITERIA = [
 ]
 
 # ── Config ──
+BACKEND = os.environ.get("CHOROS_BACKEND", "llamacpp")
 LLAMACPP_URL = os.environ.get("LLAMACPP_URL", "http://100.85.15.59:8080")
-ESSAYS_FILE = sys.argv[1] if len(sys.argv) > 1 else "/tmp/asap200.json"
-OUTPUT = sys.argv[2] if len(sys.argv) > 2 else "/tmp/batch200_results.txt"
-START_IDX = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+NVIDIA_API_KEY = os.environ.get("NVIDIA_API_KEY", "")
+NVIDIA_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
+
+# Argument parsing — NVIDIA mode takes model as first arg
+if BACKEND == "nvidia":
+    if len(sys.argv) < 2:
+        print("Usage: CHOROS_BACKEND=nvidia python3 batch_grade.py <model> [essays.json] [output.txt] [start_idx]")
+        sys.exit(1)
+    MODEL = sys.argv[1]
+    ESSAYS_FILE = sys.argv[2] if len(sys.argv) > 2 else "/tmp/asap200.json"
+    OUTPUT = sys.argv[3] if len(sys.argv) > 3 else f"/tmp/batch200_{MODEL.replace('/', '_')}.txt"
+    START_IDX = int(sys.argv[4]) if len(sys.argv) > 4 else 0
+else:
+    MODEL = "gemma4-26b"
+    ESSAYS_FILE = sys.argv[1] if len(sys.argv) > 1 else "/tmp/asap200.json"
+    OUTPUT = sys.argv[2] if len(sys.argv) > 2 else "/tmp/batch200_results.txt"
+    START_IDX = int(sys.argv[3]) if len(sys.argv) > 3 else 0
+
+# ── NVIDIA NIM generate ──
+def nvidia_generate(system_prompt, user_prompt, temperature=0.2, max_tokens=4096, timeout=180):
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": user_prompt})
+    payload = json.dumps({
+        "model": MODEL,
+        "messages": messages,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "stream": False,
+    }).encode()
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(
+                NVIDIA_URL, data=payload,
+                headers={"Content-Type": "application/json",
+                         "Authorization": f"Bearer {NVIDIA_API_KEY}"},
+            )
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                data = json.loads(resp.read())
+                return data["choices"][0]["message"]["content"]
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                wait = 10 * (attempt + 1)
+                print(f"  Rate limited (429), waiting {wait}s...", flush=True)
+                time.sleep(wait)
+                continue
+            return f"[ERROR: HTTP {e.code}]"
+        except Exception as e:
+            return f"[ERROR: {e}]"
+    return "[ERROR: 429 after 3 retries]"
 
 with open(ESSAYS_FILE) as f:
     data = json.load(f)
@@ -56,6 +109,8 @@ def log(msg):
     out.flush()
 
 log(f"Batch grade — {len(essays)} essays — generic non-comp form-fill")
+log(f"Model: {MODEL}  Backend: {BACKEND}")
+log(f"Output: {OUTPUT}")
 log(f"{'='*60}")
 log(f"Start: {time.strftime('%Y-%m-%d %H:%M:%S')}")
 log(f"")
@@ -118,9 +173,18 @@ Respond in valid JSON ONLY:
 }}
 ```"""
 
-    response = generate_chat(system_prompt, user_prompt,
-                            temperature=0.2, num_predict=32768, timeout=600)
-    response = re.sub(r'<think>[\s\S]*?</think>', '', response).strip()
+    # Route to backend
+    system_prompt = "You are an expert essay evaluator."
+    if BACKEND == "nvidia":
+        import time as _time
+        response = nvidia_generate(system_prompt, user_prompt,
+                                   temperature=0.2, max_tokens=4096, timeout=180)
+        # Rate limit safety: 3s delay between requests (NVIDIA free tier: ~30/min)
+        _time.sleep(3)
+    else:
+        response = generate_chat(system_prompt, user_prompt,
+                                temperature=0.2, num_predict=32768, timeout=600)
+        response = re.sub(r'<think>[\s\S]*?</think>', '', response).strip()
     elapsed = time.time() - t0
 
     # Parse JSON
@@ -129,6 +193,7 @@ Respond in valid JSON ONLY:
         json_match = re.search(r'```(?:json)?\s*(\{[\s\S]*?\})\s*```', response)
     if not json_match:
         log(f"  FAILED parse [{elapsed:.0f}s] raw[0]")
+        log(f"  Raw response: {response[:300]}")
         raw_scores.append(0)
         continue
 

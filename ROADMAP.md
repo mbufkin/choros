@@ -29,6 +29,9 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [x] **3-value checklist decisions** — [x] met (2), [/] partial (1), [ ] not met (0). Model fills form, Python reads boxes and counts.
 - [x] **Post-hoc calibration layer** — ridge regression (poly deg 2) maps raw checklist counts → human score distribution. Best result: qwen3.6:35b ridge Kappa 0.545.
 - [x] **Cross-model form-fill benchmark** — gemma4 (0.091), phi4 (0.318), qwen (0.545) ridge Kappa. Phi4 10x faster than gemma4.
+- [x] **Prompt-specific rubrics** — 7 locked rubrics with keyword router (94.5% accuracy). Two-pass architecture: route → grade with non-comp clause per topic. (`batch_prompt_specific.py`)
+- [x] **JSON schema enforcement** — llama.cpp GBNF grammar → guaranteed valid JSON (75–85%) but kills model reasoning. Completions endpoint: gemma4 Kappa 0.150, qwen3.6 Kappa 0.103 — both worse than prompt-only baseline (0.348). Chat completions + response_format broken on current llama.cpp build (token drain into reasoning_content). See `docs/json-schema-enforcement-findings.md`.
+- [x] **Two-machine parallel architecture** — Lenovo (qwen3.6:35b CUDA, llama.cpp) + Bufkin Tower (gemma4:26b CPU Ollama). Tower CPU too slow for batch (600s/essay). Lenovo CUDA viable (48–83s/essay with schema, 120–180s prompt-only).
 - [ ] **Match types for rubric criteria** — EXACT / EXPLICIT / EQUIVALENT / SEMANTIC (from Laeyerz). Tells the model HOW strictly to match each rubric point.
 - [ ] **Confidence flags per criterion** — Low-confidence decisions flagged for teacher review.
 - [ ] **Consistency checker** — third grader axis. Does the student's answer hold together internally?

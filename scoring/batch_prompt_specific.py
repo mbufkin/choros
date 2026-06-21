@@ -107,7 +107,7 @@ Respond in valid JSON:
 
     system_prompt = "You are an expert essay grader. Grade against the specific prompt and rubric provided."
     response = generate_chat(system_prompt, user_prompt,
-                            temperature=0.2, num_predict=32768, timeout=600)
+                            temperature=0.1, num_predict=32768, timeout=600)
     response = re.sub(r'<think>[\s\S]*?</think>', '', response).strip()
     elapsed = time.time() - t0
     

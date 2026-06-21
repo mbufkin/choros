@@ -101,11 +101,13 @@ def llamacpp_generate(prompt: str, temperature: float = 0.3,
 def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
                          temperature: float = 0.3,
                          n_predict: int = 2048, timeout: int = 120) -> str:
-    """Call llama.cpp CUDA server /v1/chat/completions.
-    
+    """Call llama.cpp CUDA server /v1/chat/completions (streaming).
+
     Uses chat template from GGUF metadata. For models with thinking/reasoning
-    (qwen3.6), thinking goes to reasoning_content and final answer to content.
-    Requires higher max_tokens because thinking consumes tokens first.
+    (qwen3.6, gemma4), thinking goes to reasoning_content and final answer to
+    content. Streaming keeps the connection alive during long thinking phases
+    that would otherwise trigger HTTP timeouts — the model sends reasoning
+    tokens progressively so the socket never goes silent.
     """
     import urllib.request, urllib.error
 
@@ -118,7 +120,8 @@ def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
         "messages": messages,
         "temperature": temperature,
         "max_tokens": n_predict,
-        "stream": False,
+        "stream": True,
+        "chat_template_kwargs": {"thinking": False},
     }).encode()
 
     req = urllib.request.Request(
@@ -127,14 +130,25 @@ def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
         headers={"Content-Type": "application/json"},
     )
     try:
+        content_parts = []
+        reasoning_parts = []
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            data = json.loads(resp.read())
-            msg = data["choices"][0]["message"]
-            # Prefer content; fall back to reasoning_content if content empty
-            content = msg.get("content", "")
-            if not content.strip():
-                content = msg.get("reasoning_content", "")
-            return content
+            for line in resp:
+                line = line.decode()
+                if line.startswith("data: ") and line[6:].strip() != "[DONE]":
+                    try:
+                        chunk = json.loads(line[6:].strip())
+                        delta = chunk["choices"][0]["delta"]
+                        if delta.get("reasoning_content"):
+                            reasoning_parts.append(delta["reasoning_content"])
+                        if delta.get("content"):
+                            content_parts.append(delta["content"])
+                    except (json.JSONDecodeError, KeyError, IndexError):
+                        pass
+        content = "".join(content_parts)
+        if not content.strip():
+            content = "".join(reasoning_parts)
+        return content
     except Exception as e:
         return f"[ERROR: {e}]"
 
