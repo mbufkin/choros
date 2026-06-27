@@ -504,3 +504,44 @@ Calibrate the node questions with a proper N=20 ASAP run to find the right thres
 - Code and results at `mbufkin/choros` when merged
 
 *Phase 7 run on a Lenovo DGX Spark (NVIDIA GB10, 119GB RAM, aarch64) with DS4 server: DeepSeek V4 Flash IQ2XXS (port 8082). June 27, 2026.*
+
+---
+
+### 14. Phase 7.1 — 7-Level Expansion (June 27)
+
+Phase 7 proved the decision-tree architecture eliminated scoring bias (no compression, no inflation). The next question: **would more terminal levels improve discrimination?**
+
+The 5-level tree (Off-Task, Novice, Developing, Proficient, Advanced) was expanded to 7 levels by splitting the depth gate into three tiers: depth_gate → depth_synthesis → depth_exemplary. This created Advanced (5/7), Distinguished (6/7), and Exemplary (7/7) as distinct levels.
+
+**Result: No improvement.**
+
+| Version | Levels | Linear K | Quadratic K |
+|---------|--------|----------|-------------|
+| 5-level | 5 | 0.358 | 0.617 |
+| 7-level | 7 | 0.376 | 0.622 |
+
+The ceiling is **node question quality, not bucket count**. Both versions route to the same place because the depth_gate question is too lenient — "does this show any analysis beyond opinion?" is satisfied by almost any multi-paragraph essay. The bottleneck is at individual node phrasing, not tree structure or terminal count.
+
+**Confusion (7-level):**
+```
+H= 2 → Novice ✅
+H= 6 → Developing ✅
+H= 7 → 1× Distinguished, 1× Developing ✅
+H= 8 → 7× Distinguished, 1× Developing ❌ (overgrade)
+H= 9 → all Distinguished ❌ (should split Advanced/Distinguished)
+H=10 → all Distinguished ❌
+H=11 → Distinguished ❌ (should be Exemplary)
+```
+
+**Key insight:** Adding terminal nodes without fixing the gates that feed them doesn't help. The depth_gate lets H=7-8 essays through to Distinguished because they pass "any analysis" — the gate needs to ask for *specific evidence* earlier in the tree.
+
+**Model floor confirmed:** Nemotron 3 Nano 30B A3B failed (0.02 Kappa). Nemotron Super 49B routes correctly. Decision-tree grading requires ≥49B.
+
+### Artifacts
+
+- `phase7_nemotron49_n20.py` — 5-level tree, N=20 run
+- `phase71_nemotron49_n20.py` — 7-level expansion, N=20 run
+- Results JSON at `/tmp/phase7_nemotron49_n20_results.json` and `/tmp/phase71_nemotron49_n20_results.json`
+- Full documentation: [[50-Research/Phase 7 — Decision Tree Grading Architecture]]
+
+*Phase 7.1 run on NVIDIA API with nvidia/llama-3.3-nemotron-super-49b-v1. June 27, 2026.*

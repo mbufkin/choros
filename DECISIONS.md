@@ -25,6 +25,26 @@ Ideally: Year at a Glance, Quarter at a Glance, Week at a Glance provided by the
 ### Teacher Documentation Is the Hardest Problem
 Teachers struggle to document even legally required items (industry-based certifications tied to school ratings). The system cannot solve this — it can only document what it receives and make the gaps visible. This is a district-level reality, not a product limitation.
 
+### Model Is NOT Completely Interchangeable (Updated 2026-06-27)
+The Phase 7 decision-tree experiment proved this assumption wrong at the 30B scale. Nemotron 3 Nano 30B A3B could not reliably route through the tree (4/20 essays misrouted as "Off-Task," 13/20 defaulted to "Novice"). Nemotron Super 49B *can* route correctly (0/20 misrouted). The floor for decision-tree grading is ~49B. Models below this threshold lack the reasoning capacity to evaluate quality dimensions consistently. This is now a documented constraint — the tree architecture works, but requires a model that can reason about abstract quality criteria.
+
+### Phase 7 — Decision Tree Grading (2026-06-27)
+Scoring bias lives in the scoring step, not the observation step. Every prior phase (1-6) asked models to assign a number and got systematic compression or inflation (Kappa 0.000-0.240). Phase 7 replaces number assignment with a yes/no decision tree grounded in quoted evidence.
+
+**Architecture:** 8-node binary tree. Each node asks one quality question (task alignment → completeness → quality gate → correctness/clarity → depth). Model never outputs a score — the score is derived deterministically from the path taken.
+
+**Results (Nemotron Super 49B, N=20 ASAP):**
+- 5-level tree: Linear 0.358 / Quadratic 0.617
+- 7-level expansion: Linear 0.376 / Quadratic 0.622 (no improvement — ceiling is node question quality, not bucket count)
+
+**What works:** No compression. No inflation. Proper routing through all gates. Off-Task essays correctly identified (0 of 20 misrouted on 49B).
+
+**What's stuck:** 0.36/0.62 ceiling. The depth gate is too lenient — essays with modest substance pass through to high scores. Fix requires node question calibration, not architecture changes.
+
+**Model floor:** ~49B required. 30B models can't reliably evaluate quality dimensions.
+
+Full documentation: [[50-Research/Phase 7 — Decision Tree Grading Architecture]]
+
 ## Deferred
 
 ### Pacing Adjustments (Lagging / Ahead)
