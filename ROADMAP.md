@@ -39,7 +39,8 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [ ] **Prompt sensitivity audit** — map what prompt wording changes affect bias (we saw -0.042 to 0.318).
 - [x] **Phase 4: Cross-Model Two-Pass** — Ornith 35B (supportive) → Nemotron 9B (adversarial). Kappa 0.002. Too much drift — models push back uniformly.
 - [x] **Phase 5: Rubric Judge** — Ornith (rubric-aligned feedback) → Nemotron (per-dimension scores + quotes). **Kappa 0.4305 (quadratic) — best result.** 3-tier rubric anchors force grounding.
-- [ ] **Exemplar calibration** — Give grader model scored exemplars at each level before grading. Probable next breakthrough.
+- [x] **Phase 6: Calibrated Judge** — Model observes (no scores), deterministic scoring. Kappa 0.012. Pattern correct, but observation range still compressed (1-3/6). Bottleneck is exemplar distribution, not architecture.
+- [ ] **Exemplar-grounded scoring** — Phase 7: Show scored exemplars at each level, place new essay relative to anchors. This closes the remaining gap.
 
 ## Next (Post-POC)
 

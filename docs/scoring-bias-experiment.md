@@ -374,4 +374,45 @@ Each dimension uses behavioral anchors from the ASAP rubric:
 
 ---
 
-*Phase 4-5 run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM, aarch64) with llama.cpp servers: Ornith-1.0-35B-Q4_K_M.gguf (port 8080) and NVIDIA-Nemotron-Nano-9B-v2-Q4_K_M.gguf (port 8081). June 26, 2026.*
+## 12. Phase 6 — Calibrated Judge (June 26)
+
+**Hypothesis:** Separate observation from scoring entirely. The model provides structured observations (dimension + verbatim quote + behavioral description) but NEVER assigns a number. A deterministic Python layer maps observation patterns to scores.
+
+### Design
+
+| Step | Who | What |
+|------|-----|------|
+| **Observation** | Nemotron Nano 9B v2 (single pass) | Read essay + exemplar anchors, produce dimension quotes and behavioral observations (no numbers) |
+| **Scoring** | Python (keyword heuristics) | Pattern-match observation text against penalty/bonus markers → scaled score 1-12 |
+
+### Results (N=20)
+
+| Metric | Value |
+|--------|-------|
+| **Linear Kappa** | **-0.022** |
+| **Quadratic Kappa** | **0.012** |
+| Valid results | 20/20 |
+| Score range | 3-6 /12 (severe compression) |
+
+### Key Finding
+
+The pattern architecture is **correct** — model observations were grounded, consistent, and quote-backed (e.g., "the essay fails to address the prompt about school uniforms" for off-topic essays). But the deterministic keyword heuristic was too crude. Matching words like "minimal," "lacks," "sophisticated" against a fixed penalty/bonus table doesn't capture real quality differences.
+
+**The real bottleneck:** model observations only used the 1-3 range per dimension (compressed to 3-6/12) for all 20 essays. With only 3 discrete feature values across 17 valid essays, even ridge regression (degree 2 polynomial, 10 parameters) overfits and produces negative Kappa on cross-validation.
+
+### What this tells us
+
+The model's observation range is compressed because it has **no exemplar distribution**. It doesn't know what a 1/6 or 6/6 essay looks like structurally, so it anchors to the descriptor middle and stays there. Until the model sees real scored exemplars at each level, no calibration layer above can produce Kappa above ~0.43.
+
+The remaining path is **exemplar-grounded scoring**:
+
+1. Show the model 1-2 real essays at each score level (1, 3, 5, 7, 9, 11/12) with human-assigned dimension scores
+2. Ask it to place the new essay relative to those anchors
+3. Use the rubric + quote pattern from Phase 5 for grounding
+4. Score is computed as distance-weighted average of nearest exemplars, not a model-assigned number
+
+This removes both the "no exemplar distribution" and "model assigns score" bottlenecks simultaneously.
+
+---
+
+*Phase 6 run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM, aarch64) with llama.cpp server: NVIDIA-Nemotron-Nano-9B-v2-Q4_K_M.gguf (port 8081). June 26, 2026.*
