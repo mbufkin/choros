@@ -100,8 +100,12 @@ def llamacpp_generate(prompt: str, temperature: float = 0.3,
 
 def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
                          temperature: float = 0.3,
-                         n_predict: int = 2048, timeout: int = 120) -> str:
+                         n_predict: int = 2048, timeout: int = 120):
     """Call llama.cpp CUDA server /v1/chat/completions (streaming).
+
+    Returns (content: str, completion_tokens: int).
+    Captures usage.completion_tokens from the final SSE chunk for
+    experiment tracking (e.g., BLUF reasoning-length studies).
 
     Uses chat template from GGUF metadata. For models with thinking/reasoning
     (qwen3.6, gemma4), thinking goes to reasoning_content and final answer to
@@ -132,6 +136,7 @@ def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
     try:
         content_parts = []
         reasoning_parts = []
+        completion_tokens = 0
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             for line in resp:
                 line = line.decode()
@@ -143,14 +148,17 @@ def llamacpp_chat_generate(system_prompt: str, user_prompt: str,
                             reasoning_parts.append(delta["reasoning_content"])
                         if delta.get("content"):
                             content_parts.append(delta["content"])
+                        usage = chunk.get("usage", {})
+                        if usage.get("completion_tokens"):
+                            completion_tokens = usage["completion_tokens"]
                     except (json.JSONDecodeError, KeyError, IndexError):
                         pass
         content = "".join(content_parts)
         if not content.strip():
             content = "".join(reasoning_parts)
-        return content
+        return content, completion_tokens
     except Exception as e:
-        return f"[ERROR: {e}]"
+        return f"[ERROR: {e}]", 0
 
 
 def generate(prompt: str, temperature: float = 0.3,
@@ -165,18 +173,34 @@ def generate(prompt: str, temperature: float = 0.3,
 
 
 def generate_chat(system_prompt: str, user_prompt: str,
-                  temperature: float = 0.3,
-                  num_predict: int = 2048, timeout: int = 120) -> str:
+                   temperature: float = 0.3,
+                   num_predict: int = 2048, timeout: int = 120) -> str:
     """Generate via chat completions (for models needing template handling)."""
     if BACKEND == "ollama":
         # Fallback: concatenate into single prompt for ollama
         prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
         return ollama_generate(prompt, temperature=temperature,
-                               num_predict=num_predict, timeout=timeout)
+                                num_predict=num_predict, timeout=timeout)
+    else:
+        content, _ = llamacpp_chat_generate(system_prompt, user_prompt,
+                                             temperature=temperature,
+                                             n_predict=num_predict, timeout=timeout)
+        return content
+
+
+def generate_chat_with_usage(system_prompt: str, user_prompt: str,
+                              temperature: float = 0.3,
+                              num_predict: int = 2048, timeout: int = 120):
+    """Generate via chat completions, returning (content: str, completion_tokens: int).
+    For experiments that need to measure reasoning length (eval_count)."""
+    if BACKEND == "ollama":
+        prompt = f"{system_prompt}\n\n{user_prompt}" if system_prompt else user_prompt
+        return ollama_generate(prompt, temperature=temperature,
+                                num_predict=num_predict, timeout=timeout), 0
     else:
         return llamacpp_chat_generate(system_prompt, user_prompt,
-                                      temperature=temperature,
-                                      n_predict=num_predict, timeout=timeout)
+                                       temperature=temperature,
+                                       n_predict=num_predict, timeout=timeout)
 
 
 # ---------------------------------------------------------------------------

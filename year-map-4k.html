@@ -3,425 +3,475 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Choros — Year Map (4K)</title>
+  <title>Choros — Complete Year Map</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Inter', sans-serif;
       background: #0a0a0f;
       width: 3840px;
-      min-height: 2160px;
       color: #e2e8f0;
       padding: 80px 120px;
     }
 
-    /* ========== HEADER ========== */
-    .header {
-      text-align: center;
-      margin-bottom: 80px;
-    }
+    /* === HEADER === */
+    .header { text-align: center; margin-bottom: 80px; }
+    .header-symbol { font-family: Georgia, serif; font-size: 160px; font-style: italic; color: #c97d60; line-height: 1; margin-bottom: 8px; }
+    .header h1 { font-size: 64px; font-weight: 800; letter-spacing: 12px; color: #e0d0a0; margin-bottom: 12px; }
+    .header .subtitle { color: #7a6a40; font-size: 28px; letter-spacing: 4px; font-family: 'JetBrains Mono', monospace; }
 
-    .header-symbol {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: 160px;
-      font-style: italic;
-      color: #c97d60;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-
-    .header h1 {
-      font-size: 64px;
-      font-weight: 800;
-      letter-spacing: 12px;
-      color: #e0d0a0;
-      margin-bottom: 12px;
-    }
-
-    .header .subtitle {
-      color: #7a6a40;
-      font-size: 28px;
-      letter-spacing: 4px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* ========== TIMELINE ========== */
+    /* === TIMELINE === */
     .timeline-container {
       background: rgba(15, 23, 42, 0.3);
-      border-radius: 40px;
-      border: 2px solid #1e293b;
-      padding: 60px 50px;
-      margin-bottom: 60px;
+      border-radius: 40px; border: 2px solid #1e293b;
+      padding: 60px 50px; margin-bottom: 60px;
     }
+    .phase-row { display: flex; gap: 0; margin-bottom: 40px; }
+    .phase { flex: 1; padding: 40px 30px; border-radius: 24px; text-align: center; }
+    .phase-num { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 6px; margin-bottom: 16px; opacity: 0.7; }
+    .phase-icon { font-size: 52px; margin-bottom: 12px; }
+    .phase h3 { font-size: 28px; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px; }
+    .phase .when { font-size: 20px; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
 
-    /* Phase row */
-    .phase-row {
-      display: flex;
-      gap: 0;
-      margin-bottom: 40px;
-    }
+    .phase-1 { background: rgba(201,125,96,0.08); border: 2px solid rgba(201,125,96,0.2); }
+    .phase-1 .phase-num, .phase-1 h3 { color: #c97d60; }
+    .phase-2 { background: rgba(245,158,11,0.06); border: 2px solid rgba(245,158,11,0.15); }
+    .phase-2 .phase-num, .phase-2 h3 { color: #f59e0b; }
+    .phase-3 { background: rgba(34,211,238,0.06); border: 2px solid rgba(34,211,238,0.15); }
+    .phase-3 .phase-num, .phase-3 h3 { color: #22d3ee; }
+    .phase-4 { background: rgba(167,139,250,0.06); border: 2px solid rgba(167,139,250,0.15); }
+    .phase-4 .phase-num, .phase-4 h3 { color: #a78bfa; }
+    .phase-5 { background: rgba(34,197,94,0.06); border: 2px solid rgba(34,197,94,0.15); }
+    .phase-5 .phase-num, .phase-5 h3 { color: #22c55e; }
 
-    .phase {
-      flex: 1;
-      position: relative;
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-    }
-
-    .phase-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 18px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 6px;
-      margin-bottom: 16px;
-      opacity: 0.7;
-    }
-
-    .phase-icon {
-      font-size: 52px;
-      margin-bottom: 12px;
-    }
-
-    .phase h3 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
-    }
-
-    .phase .when {
-      font-size: 20px;
-      color: #94a3b8;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* Phase colors */
-    .phase-1 { background: rgba(201, 125, 96, 0.08); border: 2px solid rgba(201, 125, 96, 0.2); }
-    .phase-1 .phase-num { color: #c97d60; }
-    .phase-1 h3 { color: #c97d60; }
-
-    .phase-2 { background: rgba(245, 158, 11, 0.06); border: 2px solid rgba(245, 158, 11, 0.15); }
-    .phase-2 .phase-num { color: #f59e0b; }
-    .phase-2 h3 { color: #f59e0b; }
-
-    .phase-3 { background: rgba(34, 211, 238, 0.06); border: 2px solid rgba(34, 211, 238, 0.15); }
-    .phase-3 .phase-num { color: #22d3ee; }
-    .phase-3 h3 { color: #22d3ee; }
-
-    .phase-4 { background: rgba(167, 139, 250, 0.06); border: 2px solid rgba(167, 139, 250, 0.15); }
-    .phase-4 .phase-num { color: #a78bfa; }
-    .phase-4 h3 { color: #a78bfa; }
-
-    .phase-5 { background: rgba(34, 197, 94, 0.06); border: 2px solid rgba(34, 197, 94, 0.15); }
-    .phase-5 .phase-num { color: #22c55e; }
-    .phase-5 h3 { color: #22c55e; }
-
-    /* Arrow flow */
-    .arrow-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 50px;
-    }
-
-    .arrow-bar {
-      flex: 1;
-      height: 4px;
-      border-radius: 2px;
-    }
-
+    .arrow-row { display: flex; align-items: center; margin-bottom: 50px; }
+    .arrow-bar { flex: 1; height: 4px; border-radius: 2px; }
     .a-p1 { background: linear-gradient(90deg, #c97d60, rgba(245,158,11,0.5)); }
     .a-p2 { background: linear-gradient(90deg, rgba(245,158,11,0.5), rgba(34,211,238,0.5)); }
     .a-p3 { background: linear-gradient(90deg, rgba(34,211,238,0.5), rgba(167,139,250,0.5)); }
     .a-p4 { background: linear-gradient(90deg, rgba(167,139,250,0.5), #22c55e); }
+    .arrow-chevron { color: #475569; font-size: 24px; font-family: 'JetBrains Mono', monospace; margin: 0 4px; }
 
-    .arrow-chevron {
-      color: #475569;
-      font-size: 24px;
-      font-family: 'JetBrains Mono', monospace;
-      margin: 0 4px;
-    }
-
-    /* Detail Cards */
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 24px;
-    }
-
-    .detail-card {
-      background: rgba(15, 23, 42, 0.6);
-      border-radius: 20px;
-      border: 2px solid #1e293b;
-      padding: 32px 28px;
-    }
-
-    .detail-card h4 {
-      font-size: 20px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      margin-bottom: 24px;
-    }
-
-    .dc-1 h4 { color: #c97d60; }
-    .dc-2 h4 { color: #f59e0b; }
-    .dc-3 h4 { color: #22d3ee; }
-    .dc-4 h4 { color: #a78bfa; }
-    .dc-5 h4 { color: #22c55e; }
-
-    .detail-card ul {
-      list-style: none;
-      font-size: 18px;
-      color: #94a3b8;
-      line-height: 1.9;
-    }
-
+    .detail-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+    .detail-card { background: rgba(15,23,42,0.6); border-radius: 20px; border: 2px solid #1e293b; padding: 32px 28px; }
+    .detail-card h4 { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 24px; }
+    .dc-1 h4 { color: #c97d60; } .dc-2 h4 { color: #f59e0b; } .dc-3 h4 { color: #22d3ee; }
+    .dc-4 h4 { color: #a78bfa; } .dc-5 h4 { color: #22c55e; }
+    .detail-card ul { list-style: none; font-size: 18px; color: #94a3b8; line-height: 1.9; }
     .detail-card li { padding-left: 24px; position: relative; margin-bottom: 6px; }
     .detail-card li::before { content: '•'; position: absolute; left: 0; opacity: 0.5; font-size: 22px; line-height: 1.6; }
+    .actor-tag { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; padding: 3px 10px; border-radius: 5px; margin-left: 8px; display: inline-block; }
+    .at-teacher { background: rgba(201,125,96,0.2); color: #c97d60; }
+    .at-frontier { background: rgba(245,158,11,0.2); color: #f59e0b; }
+    .at-local { background: rgba(52,211,153,0.2); color: #34d399; }
+    .at-student { background: rgba(34,211,238,0.2); color: #22d3ee; }
 
-    .actor-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 5px;
-      margin-left: 8px;
-      display: inline-block;
-    }
-
-    .at-teacher  { background: rgba(201, 125, 96, 0.2); color: #c97d60; }
-    .at-frontier { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-    .at-local    { background: rgba(52, 211, 153, 0.2); color: #34d399; }
-    .at-student  { background: rgba(34, 211, 238, 0.2); color: #22d3ee; }
-
-    /* Bottom Summary */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-      margin-top: 60px;
-    }
-
-    .card {
-      background: rgba(15, 23, 42, 0.5);
-      border-radius: 20px;
-      border: 2px solid #1e293b;
-      padding: 36px 32px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .card-dot { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; }
-    .card-dot.copper  { background: #c97d60; }
-    .card-dot.amber   { background: #f59e0b; }
-    .card-dot.emerald { background: #34d399; }
-    .card-dot.cyan    { background: #22d3ee; }
-
+    /* === SUMMARY CARDS === */
+    .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 60px; }
+    .card { background: rgba(15,23,42,0.5); border-radius: 20px; border: 2px solid #1e293b; padding: 36px 32px; }
+    .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .card-dot { width: 16px; height: 16px; border-radius: 50%; }
+    .card-dot.copper { background: #c97d60; } .card-dot.amber { background: #f59e0b; }
+    .card-dot.emerald { background: #34d399; } .card-dot.cyan { background: #22d3ee; }
     .card h3 { font-size: 22px; font-weight: 700; }
-    .card p  { color: #94a3b8; font-size: 18px; line-height: 1.7; }
+    .card p { color: #94a3b8; font-size: 18px; line-height: 1.7; }
     .card ul { list-style: none; color: #94a3b8; font-size: 18px; line-height: 1.8; }
     .card li { padding-left: 22px; position: relative; margin-bottom: 4px; }
     .card li::before { content: '•'; position: absolute; left: 0; opacity: 0.5; }
     .card strong { color: #cbd5e1; }
 
-    .footer {
-      text-align: center;
-      margin-top: 60px;
-      color: #475569;
-      font-size: 20px;
-      font-family: 'JetBrains Mono', monospace;
+    /* === DEEP DIVE SECTIONS === */
+    .deep-section {
+      margin-bottom: 60px;
+      border-radius: 40px;
+      border: 2px solid #1e293b;
+      overflow: hidden;
     }
+
+    .deep-header {
+      padding: 50px 60px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .deep-header .phase-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      padding: 12px 28px;
+      border-radius: 16px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .deep-header h2 { font-size: 44px; font-weight: 800; letter-spacing: 1px; }
+    .deep-header .when-big { font-size: 24px; font-family: 'JetBrains Mono', monospace; margin-left: auto; opacity: 0.6; }
+
+    /* Section colors */
+    .ds1 { border-color: rgba(201,125,96,0.2); }
+    .ds1 .deep-header { background: rgba(201,125,96,0.06); }
+    .ds1 .phase-badge { background: rgba(201,125,96,0.15); color: #c97d60; }
+    .ds1 h2 { color: #c97d60; }
+
+    .ds2 { border-color: rgba(245,158,11,0.2); }
+    .ds2 .deep-header { background: rgba(245,158,11,0.05); }
+    .ds2 .phase-badge { background: rgba(245,158,11,0.12); color: #f59e0b; }
+    .ds2 h2 { color: #f59e0b; }
+
+    .ds3 { border-color: rgba(34,211,238,0.2); }
+    .ds3 .deep-header { background: rgba(34,211,238,0.05); }
+    .ds3 .phase-badge { background: rgba(34,211,238,0.12); color: #22d3ee; }
+    .ds3 h2 { color: #22d3ee; }
+
+    .ds4 { border-color: rgba(167,139,250,0.2); }
+    .ds4 .deep-header { background: rgba(167,139,250,0.05); }
+    .ds4 .phase-badge { background: rgba(167,139,250,0.12); color: #a78bfa; }
+    .ds4 h2 { color: #a78bfa; }
+
+    .ds5 { border-color: rgba(34,197,94,0.2); }
+    .ds5 .deep-header { background: rgba(34,197,94,0.05); }
+    .ds5 .phase-badge { background: rgba(34,197,94,0.12); color: #22c55e; }
+    .ds5 h2 { color: #22c55e; }
+
+    /* Tree content */
+    .deep-body { padding: 50px 60px; background: rgba(15,23,42,0.2); }
+
+    .tree-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+
+    .tree-col h4 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #1e293b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .tree-item {
+      margin-bottom: 28px;
+      padding-left: 0;
+    }
+
+    .tree-item .item-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-bottom: 6px;
+    }
+
+    .tree-item .item-detail {
+      font-size: 17px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .tree-item .item-meta {
+      font-size: 15px;
+      color: #64748b;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 4px;
+    }
+
+    .tree-note {
+      margin-top: 28px;
+      padding: 20px 24px;
+      border-radius: 12px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .note-decided { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15); color: #86efac; }
+    .note-deferred { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.15); color: #fcd34d; }
+    .note-open { background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.15); color: #c4b5fd; }
+    .note-warn { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); color: #fca5a5; }
+
+    .tree-note .note-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .principle-tag {
+      display: inline-block;
+      font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-right: 8px;
+      margin-bottom: 6px;
+    }
+    .pt-core { background: rgba(201,125,96,0.15); color: #c97d60; }
+    .pt-design { background: rgba(34,211,238,0.12); color: #22d3ee; }
+
+    /* Footer */
+    .footer { text-align: center; margin-top: 60px; color: #475569; font-size: 20px; font-family: 'JetBrains Mono', monospace; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- ═══════ HEADER ═══════ -->
   <div class="header">
     <div class="header-symbol">χ</div>
     <h1>C H O R O S</h1>
-    <p class="subtitle">Year Map · Cohort AI Teacher</p>
+    <p class="subtitle">Complete Year Map · Cohort AI Teacher</p>
   </div>
 
-  <!-- TIMELINE -->
+  <!-- ═══════ TIMELINE ═══════ -->
   <div class="timeline-container">
-
-    <!-- Phase headers -->
     <div class="phase-row">
-      <div class="phase phase-1">
-        <div class="phase-num">Phase 1</div>
-        <div class="phase-icon">📋</div>
-        <h3>Pre-School Setup</h3>
-        <div class="when">July – August</div>
-      </div>
-      <div class="phase phase-2">
-        <div class="phase-num">Phase 2</div>
-        <div class="phase-icon">🗺️</div>
-        <h3>Crystallization</h3>
-        <div class="when">August</div>
-      </div>
-      <div class="phase phase-3">
-        <div class="phase-num">Phase 3</div>
-        <div class="phase-icon">📖</div>
-        <h3>In-Year Execution</h3>
-        <div class="when">August – May</div>
-      </div>
-      <div class="phase phase-4">
-        <div class="phase-num">Phase 4</div>
-        <div class="phase-icon">🎯</div>
-        <h3>Mid-Year Exam</h3>
-        <div class="when">December – January</div>
-      </div>
-      <div class="phase phase-5">
-        <div class="phase-num">Phase 5</div>
-        <div class="phase-icon">🏁</div>
-        <h3>End of Year</h3>
-        <div class="when">May – June</div>
-      </div>
+      <div class="phase phase-1"><div class="phase-num">Phase 1</div><div class="phase-icon">📋</div><h3>Pre-School Setup</h3><div class="when">July – August</div></div>
+      <div class="phase phase-2"><div class="phase-num">Phase 2</div><div class="phase-icon">🗺️</div><h3>Crystallization</h3><div class="when">August</div></div>
+      <div class="phase phase-3"><div class="phase-num">Phase 3</div><div class="phase-icon">📖</div><h3>In-Year Execution</h3><div class="when">August – May</div></div>
+      <div class="phase phase-4"><div class="phase-num">Phase 4</div><div class="phase-icon">🎯</div><h3>Mid-Year Exam</h3><div class="when">December – January</div></div>
+      <div class="phase phase-5"><div class="phase-num">Phase 5</div><div class="phase-icon">🏁</div><h3>End of Year</h3><div class="when">May – June</div></div>
     </div>
-
-    <!-- Arrow flow -->
     <div class="arrow-row">
-      <div class="arrow-bar a-p1"></div>
-      <div class="arrow-chevron">▶</div>
-      <div class="arrow-bar a-p2"></div>
-      <div class="arrow-chevron">▶</div>
-      <div class="arrow-bar a-p3"></div>
-      <div class="arrow-chevron">▶</div>
-      <div class="arrow-bar a-p4"></div>
-      <div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p1"></div><div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p2"></div><div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p3"></div><div class="arrow-chevron">▶</div>
+      <div class="arrow-bar a-p4"></div><div class="arrow-chevron">▶</div>
     </div>
-
-    <!-- Detail cards -->
     <div class="detail-grid">
-      <div class="detail-card dc-1">
-        <h4>Setup</h4>
-        <ul>
-          <li>Upload calendar <span class="actor-tag at-teacher">teacher</span></li>
-          <li>Upload syllabus</li>
-          <li>Upload textbook</li>
-          <li>Upload district documents</li>
-          <li>Stateful teacher JSON created</li>
-          <li>No minimum doc set —<br>work with what is given</li>
-          <li>Calendar format ingested<br>(ICS, PDF, or manual entry)</li>
-        </ul>
-      </div>
-
-      <div class="detail-card dc-2">
-        <h4>Map the Year</h4>
-        <ul>
-          <li>Frontier model processes<br>all documents <span class="actor-tag at-frontier">frontier</span></li>
-          <li>Structured curriculum map<br>with checkpoints</li>
-          <li>Checkpoint granularity:<br>Year / Quarter / Week</li>
-          <li>Teacher reviews &amp; approves <span class="actor-tag at-teacher">teacher</span></li>
-          <li>Audit log records approval</li>
-          <li>Class type documented<br>(45 min / 90 min / block)</li>
-        </ul>
-      </div>
-
-      <div class="detail-card dc-3">
-        <h4>Teach &amp; Learn</h4>
-        <ul>
-          <li>Roster pulled in — per-class files</li>
-          <li>Pre-assessment <span class="actor-tag at-frontier">frontier</span></li>
-          <li>Lessons generated <span class="actor-tag at-local">local</span></li>
-          <li>Students complete on web <span class="actor-tag at-student">student</span></li>
-          <li>Deterministic quiz scoring</li>
-          <li>Misconception tagging <span class="actor-tag at-local">local</span></li>
-          <li>Session pacing recalculated<br>around holidays &amp; assemblies</li>
-          <li>Pacing adjustments logged<br>to audit trail</li>
-        </ul>
-      </div>
-
-      <div class="detail-card dc-4">
-        <h4>Strongest Signal</h4>
-        <ul>
-          <li>Use existing MOY <strong>or</strong> <span class="actor-tag at-teacher">teacher</span></li>
-          <li>Generate MOY <span class="actor-tag at-frontier">frontier</span></li>
-          <li>Item-level validation<br>against curriculum docs</li>
-          <li>Cross-cohort gap analysis</li>
-          <li>Remediation suggestions<br>per student / per standard</li>
-          <li>Teacher reviews every item <span class="actor-tag at-teacher">teacher</span></li>
-          <li>Uncovered standards flagged —<br>never fail silently</li>
-        </ul>
-      </div>
-
-      <div class="detail-card dc-5">
-        <h4>Full Picture</h4>
-        <ul>
-          <li>Culmination exam</li>
-          <li>Growth trajectory visible:<br>Pre → Checkpoints → MOY → EOY</li>
-          <li>Year-end summary reports</li>
-          <li>Teacher file archived</li>
-          <li>Optional: carry forward<br>to next academic year</li>
-          <li>Full audit trail preserved<br>for professional record</li>
-        </ul>
-      </div>
+      <div class="detail-card dc-1"><h4>Setup</h4><ul>
+        <li>Upload calendar <span class="actor-tag at-teacher">teacher</span></li>
+        <li>Upload syllabus</li><li>Upload textbook</li>
+        <li>Upload district documents</li>
+        <li>Stateful teacher JSON created</li>
+        <li>No minimum doc set</li>
+      </ul></div>
+      <div class="detail-card dc-2"><h4>Map the Year</h4><ul>
+        <li>Frontier model processes docs <span class="actor-tag at-frontier">frontier</span></li>
+        <li>Structured curriculum map</li>
+        <li>Checkpoints placed</li>
+        <li>Teacher reviews &amp; approves <span class="actor-tag at-teacher">teacher</span></li>
+        <li>Audit log records approval</li>
+      </ul></div>
+      <div class="detail-card dc-3"><h4>Teach &amp; Learn</h4><ul>
+        <li>Roster pulled in</li>
+        <li>Pre-assessment <span class="actor-tag at-frontier">frontier</span></li>
+        <li>Lessons generated <span class="actor-tag at-local">local</span></li>
+        <li>Students complete on web <span class="actor-tag at-student">student</span></li>
+        <li>Deterministic scoring</li>
+        <li>Session pacing recalculated</li>
+      </ul></div>
+      <div class="detail-card dc-4"><h4>Strongest Signal</h4><ul>
+        <li>Use existing MOY or generate <span class="actor-tag at-teacher">teacher</span></li>
+        <li>Frontier model creates exam <span class="actor-tag at-frontier">frontier</span></li>
+        <li>Cross-cohort gap analysis</li>
+        <li>Remediation per student</li>
+        <li>Uncovered standards flagged</li>
+      </ul></div>
+      <div class="detail-card dc-5"><h4>Full Picture</h4><ul>
+        <li>Culmination exam</li>
+        <li>Growth trajectory visible</li>
+        <li>Year-end summary reports</li>
+        <li>Teacher file archived</li>
+        <li>Full audit trail preserved</li>
+      </ul></div>
     </div>
-
   </div>
 
-  <!-- SUMMARY CARDS -->
+  <!-- ═══════ SUMMARY CARDS ═══════ -->
   <div class="cards">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-dot copper"></div>
-        <h3>Documentation as Single Source</h3>
-      </div>
-      <p>Model never goes outside uploaded docs. <strong>Time drifts — content does not.</strong> If a teacher uploads only "Algebra," the system produces output grounded in "Algebra" and nothing more. Full transparency: the system shows exactly what information it has and what is missing.</p>
-    </div>
+    <div class="card"><div class="card-header"><div class="card-dot copper"></div><h3>Documentation as Single Source</h3></div><p>Model never goes outside uploaded docs. <strong>Time drifts — content does not.</strong> Full transparency: the system shows exactly what information it has and what is missing.</p></div>
+    <div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Model Tiers</h3></div><ul><li><strong>Tier 1 (8–14B):</strong> Scoring + gap reports</li><li><strong>Tier 2 (32–35B):</strong> Lessons, quizzes, pacing</li><li><strong>Tier 3 (70B+):</strong> Crystallization, MOY</li><li>Build for Tier 2 first.</li></ul></div>
+    <div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>Student vs. Non-Student Split</h3></div><ul><li><strong>Frontier model:</strong> Crystallization, MOY, pre-assessments — batch jobs</li><li><strong>Local model:</strong> Lessons, quizzes, misconception tagging — student-facing</li><li><strong>Deterministic:</strong> Mastery scoring — never AI</li></ul></div>
+    <div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Audit Log — Non-Negotiable</h3></div><ul><li>Every teacher action recorded</li><li>Crystallization approved? Logged.</li><li>Pacing adjusted? Logged with reason.</li><li>Protects teacher and system.</li></ul></div>
+  </div>
 
-    <div class="card">
-      <div class="card-header">
-        <div class="card-dot amber"></div>
-        <h3>Model Tiers</h3>
-      </div>
-      <ul>
-        <li><strong>Tier 1 (8–14B):</strong> Scoring + gap reports</li>
-        <li><strong>Tier 2 (32–35B):</strong> Lessons, quizzes, pacing, remediation</li>
-        <li><strong>Tier 3 (70B+):</strong> Crystallization, MOY, clustering</li>
-        <li>Build for Tier 2 first — prove it on 32B local hardware.</li>
-      </ul>
+  <!-- ═══════ DEEP DIVE: PHASE 1 ═══════ -->
+  <div class="deep-section ds1">
+    <div class="deep-header">
+      <div class="phase-badge">Phase 1</div>
+      <h2>Pre-School Setup</h2>
+      <div class="when-big">July – August</div>
     </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-dot emerald"></div>
-        <h3>Student vs. Non-Student Split</h3>
+    <div class="deep-body">
+      <div class="tree-grid">
+        <div class="tree-col">
+          <h4 style="color:#c97d60;">Inputs</h4>
+          <div class="tree-item"><div class="item-title">School Calendar</div><div class="item-detail">Holidays, PD days, early release, assembly dates. ICS file, PDF, or manual entry. Determines available sessions.</div></div>
+          <div class="tree-item"><div class="item-title">Syllabus / Scope &amp; Sequence</div><div class="item-detail">What must be taught and in what order. May include pacing guides, standards references.</div></div>
+          <div class="tree-item"><div class="item-title">Textbook &amp; Supplementary Materials</div><div class="item-detail">The content the model draws from. PDF, markdown, plain text. Everything the model can reference.</div></div>
+          <div class="tree-item"><div class="item-title">District Requirements</div><div class="item-detail">Testing dates, pacing mandates, district-wide assessments. These become hard checkpoints.</div></div>
+          <div class="tree-item"><div class="item-title">State Standards</div><div class="item-detail">TEKS or equivalent. Deferred beyond POC but the architecture supports standard tagging.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#c97d60;">What Happens</h4>
+          <div class="tree-item"><div class="item-title">Document Ingestion</div><div class="item-detail">All documents uploaded by teacher. No minimum document set — we work with what's given. If all we get is "Algebra," we produce output grounded in "Algebra" and nothing more.</div></div>
+          <div class="tree-item"><div class="item-title">Stateful Teacher JSON Created</div><div class="item-detail">Empty audit log initialized. Teacher identity, course metadata, document manifest recorded. This file grows across the entire year.</div></div>
+          <div class="tree-item"><div class="item-title">Calendar Parsing</div><div class="item-detail">Extract available sessions. Class type documented (45 min daily, 90 min block, A/B schedule, 4×4 block). Total sessions per checkpoint calculated.</div></div>
+          <div class="tree-item"><div class="item-title">Visibility Report</div><div class="item-detail">System shows exactly what information it has AND what it doesn't have. Full transparency on input quality. When someone questions output later, the answer is traceable.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#c97d60;">Decisions &amp; Principles</h4>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>No minimum document set. Work with what's given. Document gaps. This is a feature: the system never invents to fill holes.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Calendar format is flexible — ICS, PDF, or manual. Extraction approach adapts to input type.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>ICS vs. PDF vs. manual — what's the most common format? Where do we invest parsing effort?</div>
+          <div class="tree-note note-warn"><div class="note-label">▸ Reality Check</div>Teachers struggle to document even legally required items. The system cannot solve this — it documents what it receives and makes gaps visible.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Core Principle</div>Documentation as single source of truth. Time will drift. Content will not. If content is wrong, that's a district-level issue. V1 assumes people do their jobs.</div>
+        </div>
       </div>
-      <ul>
-        <li><strong>Frontier model:</strong> Crystallization, MOY generation, pre-assessments — batch jobs, non-student-facing</li>
-        <li><strong>Local model (Lenovo):</strong> Lesson delivery, quiz scoring, misconception tagging — student-facing</li>
-        <li><strong>Deterministic:</strong> Mastery scoring — <strong>never AI</strong></li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <div class="card-dot cyan"></div>
-        <h3>Audit Log — Non-Negotiable</h3>
-      </div>
-      <ul>
-        <li>Every teacher action modifying state is <strong>recorded</strong></li>
-        <li>Crystallization approved? <strong>Logged.</strong></li>
-        <li>Lesson bundle accepted? <strong>Logged.</strong></li>
-        <li>Pacing adjusted? <strong>Logged with reason.</strong></li>
-        <li>Protects the teacher <strong>and</strong> the system.</li>
-      </ul>
     </div>
   </div>
 
-  <p class="footer">
-    Choros · χορός · Cohort AI Teacher · github.com/mbufkin/choros
-  </p>
+  <!-- ═══════ DEEP DIVE: PHASE 2 ═══════ -->
+  <div class="deep-section ds2">
+    <div class="deep-header">
+      <div class="phase-badge">Phase 2</div>
+      <h2>Crystallization</h2>
+      <div class="when-big">August</div>
+    </div>
+    <div class="deep-body">
+      <div class="tree-grid">
+        <div class="tree-col">
+          <h4 style="color:#f59e0b;">Inputs</h4>
+          <div class="tree-item"><div class="item-title">All Phase 1 Documents</div><div class="item-detail">Calendar, syllabus, textbook, district requirements, standards. Everything uploaded during setup.</div></div>
+          <div class="tree-item"><div class="item-title">Class Type Configuration</div><div class="item-detail">45-min daily, 90-min block, A/B schedule, 4×4 block. Determines session counts and lesson pacing.</div></div>
+          <div class="tree-item"><div class="item-title">Frontier Model</div><div class="item-detail">Non-student-facing. Batch job. 70B+ recommended for full crystallization; 32B may need chunking or overnight passes.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#f59e0b;">What Happens</h4>
+          <div class="tree-item"><div class="item-title">Curriculum Map Generation</div><div class="item-detail">Frontier model processes all documents → structured map. Each checkpoint = a standard or concept cluster with a target date. Map is grounded in source documents only.</div></div>
+          <div class="tree-item"><div class="item-title">Checkpoint Placement</div><div class="item-detail">Granularity depends on provider quality. Year at a Glance, Quarter at a Glance, or Week at a Glance. District dates become hard checkpoints. If provider gives nothing, system generates a Year at a Glance because checkpoint pacing is basic pedagogy.</div></div>
+          <div class="tree-item"><div class="item-title">Teacher Review &amp; Approval</div><div class="item-detail">Teacher reviews the map, adjusts checkpoint dates, approves. Every decision recorded in audit log. System recalculates downstream if checkpoints are moved.</div></div>
+          <div class="tree-item"><div class="item-title">Scope Lock</div><div class="item-detail">Once approved, scope is locked. No creeping. No scope expansion without re-crystallization and re-approval.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#f59e0b;">Decisions &amp; Principles</h4>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Checkpoint dates ideally come from district YAG/WAG/QAG. If not provided, system generates one. If not good enough, fallback to documented adjustment.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Class type documented at crystallization — no confusion later about lesson structure.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Who owns checkpoint placement? Model proposes, teacher approves? What happens to lessons already generated for a moved checkpoint?</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Mid-year transfer student — re-crystallize or just add to existing map? Probably an assessment to place them.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Core Principle</div>Checkpoints are the drift prevention mechanism. Milestones must be reached at specific times. The model generates lessons that stay inside checkpoint boundaries.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ DEEP DIVE: PHASE 3 ═══════ -->
+  <div class="deep-section ds3">
+    <div class="deep-header">
+      <div class="phase-badge">Phase 3</div>
+      <h2>In-Year Execution</h2>
+      <div class="when-big">August – May</div>
+    </div>
+    <div class="deep-body">
+      <div class="tree-grid">
+        <div class="tree-col">
+          <h4 style="color:#22d3ee;">Inputs</h4>
+          <div class="tree-item"><div class="item-title">Crystallized Curriculum Map</div><div class="item-detail">Locked scope with checkpoints. The map everything references.</div></div>
+          <div class="tree-item"><div class="item-title">Student Roster</div><div class="item-detail">Per-classroom. Method TBD for POC. Student identity: number or email. Cross-class identity noted but deferred.</div></div>
+          <div class="tree-item"><div class="item-title">Local Model (Lenovo)</div><div class="item-detail">Student-facing. 32–35B for lesson generation, quiz scoring, misconception tagging. Real-time or near-real-time.</div></div>
+          <div class="tree-item"><div class="item-title">Frontier Model</div><div class="item-detail">Pre-assessment generation only. Batch job at start of year.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#22d3ee;">What Happens</h4>
+          <div class="tree-item"><div class="item-title">Pre-Assessment</div><div class="item-detail">Establishes baseline. Can be teacher-provided or frontier-model-generated. Measures growth from this baseline across the year. One per class or per-student diagnostics.</div></div>
+          <div class="tree-item"><div class="item-title">Lesson Generation</div><div class="item-detail">Local model generates lessons bounded by checkpoints. Model must understand class length (45 vs. 90 min) and generate accordingly. Content grounded in uploaded documents only.</div></div>
+          <div class="tree-item"><div class="item-title">Student Delivery</div><div class="item-detail">Individual web pages per student. Quiz with customization: question count, topic focus, question type. Teacher clicks "Quiz," specifies parameters, system produces. Excel/CSV fallback for schools without web access.</div></div>
+          <div class="tree-item"><div class="item-title">Deterministic Scoring</div><div class="item-detail">Right/wrong is math. Never AI. Transparent breakdown shown to learner.</div></div>
+          <div class="tree-item"><div class="item-title">Misconception Tagging</div><div class="item-detail">Local model tags wrong answers with misconception labels. Powers gap reports and remediation.</div></div>
+          <div class="tree-item"><div class="item-title">Session Pacing</div><div class="item-detail">Sessions between checkpoints recalculated dynamically. Holidays, snow days, assemblies absorbed or flagged. Pacing adjustments logged to audit trail.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#22d3ee;">Decisions &amp; Principles</h4>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Student work: webpage path (deep feedback) is preferred. Excel/CSV fallback (shallow — scores only, no misconception signal).</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Teacher interactions are buttons only. No chat. No prompt engineering. The model works behind the scenes.</div>
+          <div class="tree-note note-deferred"><div class="note-label">▸ Deferred</div>Pacing adjustments (lagging / ahead). Document that it can happen, address mechanism later.</div>
+          <div class="tree-note note-deferred"><div class="note-label">▸ Deferred</div>Noise threshold: what triggers teacher notification vs. silent absorption. Too many alerts = ignored. Not enough = not trusted. Discover through testing.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Frontier vs. local for lesson generation. If frontier, batch job. If local, real-time. Which side?</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>What happens when teacher skips a checkpoint entirely? Flag that standards weren't covered, or just log and move on?</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Core Principle</div>Support without judgment. Good teachers get sharper insight. Struggling teachers get stronger scaffolding. No labels, no tiers, no "remedial" flags.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ DEEP DIVE: PHASE 4 ═══════ -->
+  <div class="deep-section ds4">
+    <div class="deep-header">
+      <div class="phase-badge">Phase 4</div>
+      <h2>Mid-Year Exam</h2>
+      <div class="when-big">December – January</div>
+    </div>
+    <div class="deep-body">
+      <div class="tree-grid">
+        <div class="tree-col">
+          <h4 style="color:#a78bfa;">Inputs</h4>
+          <div class="tree-item"><div class="item-title">Crystallized Curriculum Map</div><div class="item-detail">What was supposed to be covered by MOY. The validation anchor.</div></div>
+          <div class="tree-item"><div class="item-title">Actual Progress Data</div><div class="item-detail">What was actually covered. Checkpoint performance. Pacing adjustments. The gap between plan and reality.</div></div>
+          <div class="tree-item"><div class="item-title">Existing MOY (optional)</div><div class="item-detail">District-provided exam. If provided, the system validates it against the curriculum map. Flags items testing uncovered standards.</div></div>
+          <div class="tree-item"><div class="item-title">Frontier Model</div><div class="item-detail">Non-student-facing. For MOY generation and validation. Batch job.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#a78bfa;">What Happens</h4>
+          <div class="tree-item"><div class="item-title">Path A: Use Existing MOY</div><div class="item-detail">District provides exam. Teacher enters results in machine-readable format. System validates exam against curriculum map. Flags items testing uncovered standards. Generates gap analysis.</div></div>
+          <div class="tree-item"><div class="item-title">Path B: Generate MOY</div><div class="item-detail">Frontier model creates mid-year exam from what was taught. Item-level validation against original curriculum documents. Teacher reviews every generated item. Audit trail traces every item to a standard.</div></div>
+          <div class="tree-item"><div class="item-title">Cross-Cohort Gap Analysis</div><div class="item-detail">Which concepts are breaking down across the class? Not just scores — specific misconception patterns. Which wrong answer → which misunderstanding.</div></div>
+          <div class="tree-item"><div class="item-title">Remediation</div><div class="item-detail">Auto-generated remediation bundles per student or per standard. Teacher reviews: Include in Next Lesson or Skip.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#a78bfa;">Decisions &amp; Principles</h4>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>The MOY is the strongest feedback signal in the system. Pre → checkpoints → MOY → EOY = growth trajectory.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Uncovered standards must not fail silently. Flagged clearly for teacher awareness.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Who sees MOY results? Just teacher, or department head? Privacy boundary.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>What action does teacher take based on MOY feedback? System suggests pacing changes, or just presents data?</div>
+          <div class="tree-note note-warn"><div class="note-label">▸ Validation Concern</div>If the model writes the test AND teaches the lessons, that's a closed loop with no outside check. Teacher review of every generated item is the safeguard. Every item must trace back to a curriculum standard.</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Strategic</div>MOY generation is where Tier 3 hardware (70B+) becomes transformative. On Tier 2 (32B), teacher-provided MOY with system validation is the realistic path.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ DEEP DIVE: PHASE 5 ═══════ -->
+  <div class="deep-section ds5">
+    <div class="deep-header">
+      <div class="phase-badge">Phase 5</div>
+      <h2>End of Year</h2>
+      <div class="when-big">May – June</div>
+    </div>
+    <div class="deep-body">
+      <div class="tree-grid">
+        <div class="tree-col">
+          <h4 style="color:#22c55e;">Inputs</h4>
+          <div class="tree-item"><div class="item-title">Full Year of Data</div><div class="item-detail">Pre-assessment → checkpoint performance → MOY → second-half checkpoints. Every data point since August.</div></div>
+          <div class="tree-item"><div class="item-title">Stateful Teacher File</div><div class="item-detail">Grown across the year. Audit logs, pacing decisions, misconception patterns. Potentially large JSON — context window concern.</div></div>
+          <div class="tree-item"><div class="item-title">Student Growth Data</div><div class="item-detail">Per-student trajectory. Baseline to final. All misconception history.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#22c55e;">What Happens</h4>
+          <div class="tree-item"><div class="item-title">Culmination Exam (EOY)</div><div class="item-detail">Same patterns as MOY. Use existing or generate. Validated against curriculum. Covers full year scope.</div></div>
+          <div class="tree-item"><div class="item-title">Growth Trajectory Report</div><div class="item-detail">Pre → Checkpoints → MOY → EOY. Full longitudinal view. Per student and cohort aggregate.</div></div>
+          <div class="tree-item"><div class="item-title">Year-End Summary</div><div class="item-detail">What was covered, what was skipped, what standards were mastered, what needs reteaching next year. All grounded in audit trail.</div></div>
+          <div class="tree-item"><div class="item-title">Teacher File Archived</div><div class="item-detail">Complete audit trail preserved for professional record. Optional: carry forward to next academic year so the system learns from pacing data.</div></div>
+        </div>
+        <div class="tree-col">
+          <h4 style="color:#22c55e;">Decisions &amp; Principles</h4>
+          <div class="tree-note note-decided"><div class="note-label">▸ Decided</div>Full audit trail preserved. Professional record. Protects teacher and system.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Teacher file carried forward to next year? If teacher teaches same course, system learns from previous pacing data.</div>
+          <div class="tree-note note-open"><div class="note-label">▸ Open Question</div>Teacher file size by June — can the model still load it into context? Chunking strategy needed?</div>
+          <div class="tree-note note-decided"><div class="note-label">▸ Core Principle</div>The purpose of the year-end is not to judge — it's to document. What happened, what was learned, what carries forward. The audit trail is the artifact.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ ACTORS LEGEND ═══════ -->
+  <div class="cards" style="margin-top:0;">
+    <div class="card"><div class="card-header"><div class="card-dot copper"></div><h3>Teacher</h3></div><p>Uploads docs, reviews &amp; approves, adjusts pacing. Buttons only. Never chats with the model. Every decision recorded in audit log.</p></div>
+    <div class="card"><div class="card-header"><div class="card-dot amber"></div><h3>Frontier Model</h3></div><p>Non-student-facing. Crystallization, MOY generation, pre-assessments. Batch jobs — never real-time. 70B+ ideal; 32B with chunking.</p></div>
+    <div class="card"><div class="card-header"><div class="card-dot emerald"></div><h3>Local Model (Lenovo)</h3></div><p>Student-facing. Lesson generation, quiz scoring, misconception tagging. Real-time or near-real-time. 32–35B on local hardware.</p></div>
+    <div class="card"><div class="card-header"><div class="card-dot cyan"></div><h3>Student</h3></div><p>Completes lessons on individual web pages. Deterministic scoring + LLM misconception feedback. Excel/CSV fallback for schools without web access.</p></div>
+  </div>
+
+  <p class="footer">Choros · χορός · Cohort AI Teacher · github.com/mbufkin/choros</p>
 
 </body>
 </html>

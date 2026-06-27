@@ -1,47 +1,601 @@
 {
+  "document_inventory": [
+    {
+      "name": "Agriculture- Plant Science.txt",
+      "type": "pacing_guide",
+      "subject": "Agriculture",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "AFNR Career Cluster overview, Plant Science definition, careers in plant science, horticulture vs floriculture",
+      "implied_content": "Introduction to the Plant Science program of study",
+      "clarity": "clear"
+    },
+    {
+      "name": "Architecture & Construction Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Architecture & Construction",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Paper tower challenge, Engineering Design Process",
+      "implied_content": "Introduction to engineering principles",
+      "clarity": "clear"
+    },
+    {
+      "name": "Arts AV Technology & Communication - Exit Ticket Day 1/2/3.txt",
+      "type": "assessment_schedule",
+      "subject": "Arts AV Technology & Communication",
+      "grade_level": "not specified",
+      "time_span": "Day 1-3",
+      "explicit_content": "Exit tickets regarding advertising, group work, and cluster interest",
+      "implied_content": "Assessment of student learning and reflection",
+      "clarity": "clear"
+    },
+    {
+      "name": "Arts AV Technology & Communication - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Arts AV Technology & Communication",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Career cluster description, pathways (Design and Multimedia Arts, Digital Communication, Printing & Imaging)",
+      "implied_content": "Introduction to multimedia careers",
+      "clarity": "clear"
+    },
+    {
+      "name": "Business, Marketing & Finance Lesson Plan_.txt",
+      "type": "pacing_guide",
+      "subject": "Business, Marketing & Finance",
+      "grade_level": "not specified",
+      "time_span": "Day 1-3",
+      "explicit_content": "Day 1, Day 2, Day 3",
+      "implied_content": "Instructional sequence for Business/Marketing",
+      "clarity": "vague"
+    },
+    {
+      "name": "Career Cluster - Exit Ticket Day 1/2/3.txt",
+      "type": "assessment_schedule",
+      "subject": "Career Exploration",
+      "grade_level": "not specified",
+      "time_span": "Day 1-3",
+      "explicit_content": "Exit tickets regarding cluster interest, group work, and presentations",
+      "implied_content": "Assessment of career cluster knowledge",
+      "clarity": "clear"
+    },
+    {
+      "name": "Career Clusters - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Career Exploration",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Overview of 13 Career Clusters in Dallas ISD",
+      "implied_content": "Introduction to career planning",
+      "clarity": "clear"
+    },
+    {
+      "name": "Career Exploration Project Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Career Exploration",
+      "grade_level": "not specified",
+      "time_span": "Project duration not specified",
+      "explicit_content": "Career Planner steps: Introduction, Career Aspirations, My Abilities, Career Goals",
+      "implied_content": "Long-term career planning project",
+      "clarity": "clear"
+    },
+    {
+      "name": "Career Exploration Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Career Exploration",
+      "grade_level": "not specified",
+      "time_span": "Not specified",
+      "explicit_content": "Career Cluster definition, Dallas ISD clusters, Flyer project, Career Exploration project",
+      "implied_content": "Instructional unit on career clusters",
+      "clarity": "clear"
+    },
+    {
+      "name": "Copy of Business, Marketing & Finance - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Business, Marketing & Finance",
+      "grade_level": "not specified",
+      "time_span": "Day 1-2",
+      "explicit_content": "Product creation, target market, pricing (markup, profit, wholesale, retail)",
+      "implied_content": "Introduction to entrepreneurship and product management",
+      "clarity": "clear"
+    },
+    {
+      "name": "Culinary-Career-Exploration-curriculum-free-asset.txt",
+      "type": "pacing_guide",
+      "subject": "Hospitality & Tourism",
+      "grade_level": "not specified",
+      "time_span": "Not specified",
+      "explicit_content": "Careers in Restaurants & Food/Beverage Services, job descriptions",
+      "implied_content": "Career exploration in hospitality",
+      "clarity": "clear"
+    },
+    {
+      "name": "Dallas ISD High School Options - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Career Exploration",
+      "grade_level": "Grades 6-8",
+      "time_span": "Not specified",
+      "explicit_content": "High school program options: STEM, Fine Arts, Health Sciences, Business, Humanities, CTE",
+      "implied_content": "Transition planning for middle schoolers",
+      "clarity": "clear"
+    },
+    {
+      "name": "Engineering Lesson.txt",
+      "type": "pacing_guide",
+      "subject": "STEM/Engineering",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Paper airplane launcher design, potential and kinetic energy",
+      "implied_content": "Introduction to physics and engineering design",
+      "clarity": "clear"
+    },
+    {
+      "name": "Family and Community Wellness-Human Services - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Human Services",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Program of study definition, pathways (Consumer, Counseling, Early Childhood, Family, Personal Care)",
+      "implied_content": "Introduction to social services",
+      "clarity": "clear"
+    },
+    {
+      "name": "Financial Literacy.txt",
+      "type": "pacing_guide",
+      "subject": "Finance",
+      "grade_level": "not specified",
+      "time_span": "Day 1-3",
+      "explicit_content": "Banking vocabulary, budgeting, checks and deposit slips",
+      "implied_content": "Personal finance management",
+      "clarity": "clear"
+    },
+    {
+      "name": "Health Science.txt",
+      "type": "pacing_guide",
+      "subject": "Health Science",
+      "grade_level": "not specified",
+      "time_span": "Day 1-2",
+      "explicit_content": "Nutrition, daily requirements, vital signs (pulse, respiratory rate, temp)",
+      "implied_content": "Introduction to medical fundamentals",
+      "clarity": "clear"
+    },
+    {
+      "name": "Information Technology.txt",
+      "type": "pacing_guide",
+      "subject": "Information Technology",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Algorithm, Copyright, Public Domain, Fair Use",
+      "implied_content": "Digital citizenship and intellectual property",
+      "clarity": "clear"
+    },
+    {
+      "name": "Law and Public Service Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Law and Public Service",
+      "grade_level": "not specified",
+      "time_span": "Not specified",
+      "explicit_content": "Criminal Justice, law enforcement careers, TEKS 127.2",
+      "implied_content": "Introduction to legal careers",
+      "clarity": "clear"
+    },
+    {
+      "name": "Manufacturing Lesson.txt",
+      "type": "pacing_guide",
+      "subject": "Manufacturing",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Production line concepts, manufacturing technologies (Pneumatics, Hydraulics, etc.)",
+      "implied_content": "Introduction to industrial production",
+      "clarity": "clear"
+    },
+    {
+      "name": "Professional Preparedness.txt",
+      "type": "pacing_guide",
+      "subject": "Professionalism",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Dress code policies (Professional, Business, Casual)",
+      "implied_content": "Workplace etiquette",
+      "clarity": "clear"
+    },
+    {
+      "name": "Skills for Success-Career Ready - Slides.txt",
+      "type": "pacing_guide",
+      "subject": "Professionalism",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Leadership skills, Resumes, Professional/Industry Dress Codes",
+      "implied_content": "Career readiness skills",
+      "clarity": "clear"
+    },
+    {
+      "name": "Teaching and Training (Education and Training).txt",
+      "type": "pacing_guide",
+      "subject": "Education and Training",
+      "grade_level": "not specified",
+      "time_span": "Day 1",
+      "explicit_content": "Program of study definition, pathways (Administration, Professional Support, Teaching & Training)",
+      "implied_content": "Introduction to education careers",
+      "clarity": "clear"
+    },
+    {
+      "name": "Transportation, Distribution and Logistics PowerPoint.txt",
+      "type": "pacing_guide",
+      "subject": "Transportation & Logistics",
+      "grade_level": "not specified",
+      "time_span": "Not specified",
+      "explicit_content": "Principles of flight, Newton's Laws of Motion, Four Forces of Flight, Engineering Design Process",
+      "implied_content": "Aviation and physics fundamentals",
+      "clarity": "clear"
+    },
+    {
+      "name": "District-Calendar.txt",
+      "type": "calendar",
+      "subject": "District-wide",
+      "grade_level": "not specified",
+      "time_span": "2026-2027 school year",
+      "explicit_content": "Start date August 11, End date May 26",
+      "implied_content": "Academic year schedule",
+      "clarity": "clear"
+    }
+  ],
   "syllabus": [
     {
-      "unit": 1,
-      "title": "Linear Equations, Graphing, and Systems",
-      "weeks": [
-        1,
-        2,
-        3
+      "unit": "Career Exploration",
+      "sequence": 1,
+      "standards": [
+        "investigate careers and design their courses of study to advance their career goals"
       ],
-      "topics": [
-        "linear equations",
-        "graphing",
-        "systems"
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Career Cluster Exit Tickets",
+          "date_or_week": "Day 1-3",
+          "source_doc": "Career Cluster - Exit Ticket Day 1/2/3.txt"
+        },
+        {
+          "description": "Career Exploration Project",
+          "date_or_week": "not specified",
+          "source_doc": "Career Exploration Project Slides.txt"
+        },
+        {
+          "description": "Dallas ISD High School Options Quiz",
+          "date_or_week": "not specified",
+          "source_doc": "Dallas ISD High School Options _ Quizizz.txt"
+        }
       ],
-      "sourceRefs": [
-        "test-algebra2.txt: Algebra chapter: linear equations, graphing, systems"
+      "source_docs": [
+        "Career Clusters - Slides.txt",
+        "Career Exploration Slides.txt",
+        "Dallas ISD High School Options - Slides.txt"
+      ]
+    },
+    {
+      "unit": "Agriculture - Plant Science",
+      "sequence": 2,
+      "standards": [
+        "The Plant Science program of study focuses on the science, research, and business of plants and other living organisms."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [],
+      "source_docs": [
+        "Agriculture- Plant Science.txt"
+      ]
+    },
+    {
+      "unit": "Architecture & Construction",
+      "sequence": 3,
+      "standards": [
+        "Design and build a paper tower based on specific criteria.",
+        "Iteratively test and modify the tower to improve its performance."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Tallest Paper Tower Challenge",
+          "date_or_week": "Day 1",
+          "source_doc": "Architecture & Construction Slides.txt"
+        },
+        {
+          "description": "Architecture and Construction Quizizz",
+          "date_or_week": "not specified",
+          "source_doc": "Architecture and Construction Quizizz.txt"
+        }
+      ],
+      "source_docs": [
+        "Architecture & Construction Slides.txt"
+      ]
+    },
+    {
+      "unit": "Arts, AV Technology & Communication",
+      "sequence": 4,
+      "standards": [
+        "designing, producing, performing, writing and publishing multimedia content."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Commercial Project",
+          "date_or_week": "not specified",
+          "source_doc": "Arts_AV_Technology_&_Communication_Commercial_Project_Rubric.txt"
+        },
+        {
+          "description": "Flyer Project",
+          "date_or_week": "not specified",
+          "source_doc": "Arts_AV_Technology_&_Communication_Flyer_Project_Rubric.txt"
+        }
+      ],
+      "source_docs": [
+        "Arts AV Technology & Communication - Slides.txt"
+      ]
+    },
+    {
+      "unit": "Business, Marketing & Finance",
+      "sequence": 5,
+      "standards": [
+        "create a product",
+        "Identify the target market for your product"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Product Presentation",
+          "date_or_week": "Day 1",
+          "source_doc": "Copy of Business, Marketing & Finance - Slides.txt"
+        }
+      ],
+      "source_docs": [
+        "Copy of Business, Marketing & Finance - Slides.txt"
+      ]
+    },
+    {
+      "unit": "Hospitality & Tourism",
+      "sequence": 6,
+      "standards": [
+        "Identify career opportunities relating to Restaurants & Food/Beverage Services",
+        "Articulate the educational requirements, typical job duties, occupational outlook, and more for each explored profession"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Brochure Project",
+          "date_or_week": "Day 2-3",
+          "source_doc": "Carrasco Brainstorm.txt"
+        }
+      ],
+      "source_docs": [
+        "Culinary-Career-Exploration-curriculum-free-asset.txt",
+        "Carrasco Brainstorm.txt"
+      ]
+    },
+    {
+      "unit": "Human Services",
+      "sequence": 7,
+      "standards": [
+        "introduces students to knowledge and skills related to social services, including child and human development and consumer sciences."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [],
+      "source_docs": [
+        "Family and Community Wellness-Human Services - Slides.txt"
+      ]
+    },
+    {
+      "unit": "Law and Public Service",
+      "sequence": 8,
+      "standards": [
+        "discussing potential careers in law enforcement"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Career Exploration Project",
+          "date_or_week": "not specified",
+          "source_doc": "Law and Public Service Project Slides.pdf"
+        }
+      ],
+      "source_docs": [
+        "Law and Public Service Slides.txt"
+      ]
+    },
+    {
+      "unit": "Manufacturing",
+      "sequence": 9,
+      "standards": [
+        "Explore a new career, manufacturing, through experiential learning.",
+        "Define what a production line is."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Manufacturing exploration Quizizz",
+          "date_or_week": "not specified",
+          "source_doc": "Manufacturing exploration _ Quizizz.txt"
+        }
+      ],
+      "source_docs": [
+        "Manufacturing Lesson.txt"
+      ]
+    },
+    {
+      "unit": "Professionalism",
+      "sequence": 10,
+      "standards": [
+        "Leadership Skills",
+        "Resumes",
+        "Professional/Industry Dress Codes"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Interview Role Play",
+          "date_or_week": "not specified",
+          "source_doc": "Interviewing Role Play Scripts.txt"
+        }
+      ],
+      "source_docs": [
+        "Professional Preparedness.txt",
+        "Skills for Success-Career Ready - Slides.txt"
+      ]
+    },
+    {
+      "unit": "STEM/Engineering",
+      "sequence": 11,
+      "standards": [
+        "Use the engineering design process to design, build, and test a paper airplane launcher",
+        "Understand how potential energy is converted to kinetic energy when using the launcher",
+        "Newton\u2019s Laws of Motion",
+        "Four Forces of Flight"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Engineering Design Process Quiz",
+          "date_or_week": "not specified",
+          "source_doc": "Engineering Lesson Quiz _ Quizizz.txt"
+        }
+      ],
+      "source_docs": [
+        "Engineering Lesson.txt",
+        "Transportation, Distribution and Logistics PowerPoint.txt"
+      ]
+    },
+    {
+      "unit": "Health Science",
+      "sequence": 12,
+      "standards": [
+        "Determine what daily requirements are for a student your age",
+        "Identify vital signs"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Vital Signs Lab Activity",
+          "date_or_week": "not specified",
+          "source_doc": "Vital Signs Lab Activity.txt"
+        }
+      ],
+      "source_docs": [
+        "Health Science.txt"
+      ]
+    },
+    {
+      "unit": "Information Technology",
+      "sequence": 13,
+      "standards": [
+        "Define the terms 'copyright,' 'public domain,' and 'fair use.'",
+        "Identify the purpose of the Four Factors of Fair Use.",
+        "Apply fair use to real-world examples"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Common Sense Media Quiz",
+          "date_or_week": "Day 1",
+          "source_doc": "Information Technology - Exit Ticket.txt"
+        }
+      ],
+      "source_docs": [
+        "Information Technology.txt"
+      ]
+    },
+    {
+      "unit": "Financial Literacy",
+      "sequence": 14,
+      "standards": [
+        "Budgeting",
+        "Checks & Deposit Slips"
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [
+        {
+          "description": "Post assessment",
+          "date_or_week": "Day 2",
+          "source_doc": "Financial Literacy.txt"
+        },
+        {
+          "description": "Crossword",
+          "date_or_week": "Day 3",
+          "source_doc": "Financial Literacy.txt"
+        }
+      ],
+      "source_docs": [
+        "Financial Literacy.txt"
+      ]
+    },
+    {
+      "unit": "Education and Training",
+      "sequence": 15,
+      "standards": [
+        "prepares CTE learners for careers related to teaching, instruction, and creation of instructional and enrichment materials."
+      ],
+      "duration_weeks": "not specified",
+      "checkpoints": [],
+      "source_docs": [
+        "Teaching and Training (Education and Training).txt"
       ]
     }
   ],
   "gaps": [
     {
-      "topic": "Quadratic functions and equations",
-      "severity": "high",
-      "detail": "Standard Algebra 2 curriculum typically includes quadratics, but no mention in provided documents.",
-      "recommendation": "Teacher should provide scope for quadratic units if this is intended as a full-year Algebra 2 course."
+      "description": "Agriculture - Plant Science unit lacks an associated assessment or checkpoint.",
+      "severity": "moderate",
+      "inferred_from": "Agriculture- Plant Science.txt",
+      "suggested_resolution": "Provide an exit ticket or quiz for the Plant Science unit."
     },
     {
-      "topic": "Polynomial operations and factoring",
-      "severity": "high",
-      "detail": "Core Algebra 2 topic not referenced in any document.",
-      "recommendation": "Teacher should define polynomial unit scope or provide supporting materials."
+      "description": "Human Services unit lacks an associated assessment or checkpoint.",
+      "severity": "moderate",
+      "inferred_from": "Family and Community Wellness-Human Services - Slides.txt",
+      "suggested_resolution": "Provide an exit ticket or assessment for the Human Services unit."
+    },
+    {
+      "description": "Education and Training unit lacks an associated assessment or checkpoint.",
+      "severity": "moderate",
+      "inferred_from": "Teaching and Training (Education and Training).txt",
+      "suggested_resolution": "Provide an exit ticket or assessment for the Education and Training unit."
+    },
+    {
+      "description": "Information Technology unit has missing content for Day 2 and Day 3.",
+      "severity": "critical",
+      "inferred_from": "Information Technology_.docx",
+      "suggested_resolution": "Provide instructional materials for Day 2 and Day 3 of the IT unit."
+    },
+    {
+      "description": "Business, Marketing & Finance unit has missing content for Day 3 in the lesson plan document.",
+      "severity": "moderate",
+      "inferred_from": "Business, Marketing & Finance Lesson Plan_.docx",
+      "suggested_resolution": "Provide instructional content for Day 3 of the Business unit."
+    },
+    {
+      "description": "The total duration of units does not fill the available school year (Aug 11 - May 26).",
+      "severity": "critical",
+      "inferred_from": "District-Calendar.txt and syllabus units",
+      "suggested_resolution": "Provide additional units or extended pacing for existing units to cover the full academic year."
     }
   ],
   "coverage": {
-    "totalTopics": 3,
-    "covered": 3,
-    "gaps": 2
+    "total_standards": 34,
+    "covered": 28,
+    "uncovered": 6,
+    "partial": 0,
+    "notes": "Standard count includes unique learning objectives and essential understandings extracted verbatim."
   },
   "pacing": {
-    "totalWeeks": 36,
-    "mappedWeeks": 3,
-    "flexWeeks": 33,
-    "notes": "Only 3 weeks of content mapped; remaining time requires additional units (e.g., quadratics, polynomials, rational expressions, exponential/logarithmic functions, etc.) to constitute a full Algebra 2 curriculum."
+    "mapped_weeks": 0,
+    "start_date": "2026-08-11",
+    "end_date": "2027-05-26",
+    "calendar_type": "not specified in documents",
+    "source_doc": "District-Calendar.pdf"
   },
-  "generated": "2026-06-15T13:55:13Z"
+  "integrity": {
+    "documents_used": 65,
+    "documents_skipped": 0,
+    "skipped_reasons": [],
+    "conflicts_found": 0,
+    "conflicts": []
+  },
+  "generated": "2026-06-22T14:49:04Z"
 }

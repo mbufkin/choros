@@ -79,3 +79,26 @@ refactor: extract Workspace to workspace.py
 ```
 
 Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
+
+## 🧠 Lessons Learned (from real sessions — append here when you discover something)
+
+### DISD CTE Curriculum
+- **15 units, 28 standards covered, 6 gaps identified** — this is the canonical crystallization baseline for the 8th-grade CTE curriculum.
+- Gap tagging: when a standard has no performance task, tag it in `gaps.json` so the scoring engine flags under-assessed standards.
+- Crystallization data lives in `.choros-data/teacher/crystallization/report.json` (persistent) and `/tmp/disd_crystallization_v2.json` (ephemeral PDF).
+
+### Scoring Architecture
+- **Deterministic scoring is separate from LLM feedback.** Right/wrong is math. "Why" is LLM. Never let the LLM assign a score — this is enforced but worth repeating.
+- The BLUF experiment found a correlation (r≈0.68) between `eval_count` and rubric scores on pilot essays. This is a **quick-proxy** signal, not a replacement for rubric scoring.
+- Rubric v1.1.0 weights are applied as score-multipliers in the scoring pipeline. If the rubric changes, bump the version and re-baseline.
+
+### Testing Gotchas
+- When testing LLM output quality: use the **two-pass approach** — blunt free-text prompt first, then extract into schema. This produces better feedback than pure JSON-forcing.
+- Always uncap local models (32K predict, 64K context, 600s timeout). Never clip for speed — the output quality degrades.
+- For A/B tests on rubric scoring: use prompt-specific checklists, not generic rubrics. Prompt-specific > generic every time.
+- When the model starts over-engineering a solution, simplify. The simplest path that works is the right one.
+
+### Common Mistakes (things we kept getting wrong)
+- The model will try to introduce pip dependencies. Choros server uses **Python stdlib only**.
+- Teacher batch jobs are **async** (crystallization, lesson generation). Don't make them real-time.
+- The model underestimates its own build speed — it will suggest slow/easy solutions when it should reach for the right one.

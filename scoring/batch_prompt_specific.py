@@ -4,7 +4,7 @@ Routes each essay to its prompt, then grades against that prompt's locked rubric
 """
 import json, sys, time, re, os
 sys.path.insert(0, '.')
-from calibrate import generate_chat, validate_evidence, cohens_kappa, calibrate_ridge
+from calibrate import generate_chat_with_usage, validate_evidence, cohens_kappa, calibrate_ridge
 from asap_rubrics import detect_topic, ASAP_RUBRICS, get_rubric_for_essay
 
 BACKEND = os.environ.get("CHOROS_BACKEND", "llamacpp")
@@ -30,6 +30,7 @@ log(f"{'='*60}")
 
 human_scores = []
 raw_scores = []
+eval_counts = []
 
 for i, essay in enumerate(essays):
     eid, human, text = essay["id"], essay["score"], essay["text"]
@@ -105,8 +106,8 @@ Respond in valid JSON:
 }}
 ```"""
 
-    system_prompt = "You are an expert essay grader. Grade against the specific prompt and rubric provided."
-    response = generate_chat(system_prompt, user_prompt,
+    system_prompt = "BOTTOM LINE UP FRONT: Lead with your scores. Be concise — no hedging, no over-explaining. You are an expert essay grader. Grade against the specific prompt and rubric provided."
+    response, eval_count = generate_chat_with_usage(system_prompt, user_prompt,
                             temperature=0.1, num_predict=32768, timeout=600)
     response = re.sub(r'<think>[\s\S]*?</think>', '', response).strip()
     elapsed = time.time() - t0
@@ -151,9 +152,10 @@ Respond in valid JSON:
         vmark = "v" if valid else "X"
         log(f'    {vmark} {expected["id"]:<22} {box} {score}  "{quote[:80]}"')
     
-    log(f"  Raw: {total}/14  Valid: {vcount}/7  [{elapsed:.0f}s]")
+    log(f"  Raw: {total}/14  Valid: {vcount}/7  [{elapsed:.0f}s | {eval_count} tok]")
     human_scores.append(human)
     raw_scores.append(total)
+    eval_counts.append(eval_count)
 
 # Final stats
 log(f"\n{'='*60}")
@@ -190,12 +192,23 @@ if len(valid_idx) >= 10:
     for j in valid_idx:
         by_score[valid_human[j]].append((raw_scores[j], cal_scores[valid_idx.index(j)]))
     
-    log(f"\nPer-score accuracy:")
+    log(f"\\nPer-score accuracy:")
     for s in sorted(by_score):
         pairs = by_score[s]
         deltas = [cs - s for _, cs in pairs]
         avg_d = sum(deltas)/len(deltas)
         log(f"  score={s} (n={len(pairs)}): mean delta={avg_d:+.2f}")
 
+# Eval count stats (BLUF experiment: does BLUF prompt affect reasoning length?)
+import statistics
+valid_ec = [eval_counts[j] for j in valid_idx]
+if valid_ec:
+    log(f"\\nEval count (completion tokens) — BLUF experiment:")
+    log(f"  Mean:   {statistics.mean(valid_ec):.0f} tok")
+    log(f"  Median: {statistics.median(valid_ec):.0f} tok")
+    log(f"  Min:    {min(valid_ec)} tok")
+    log(f"  Max:    {max(valid_ec)} tok")
+    log(f"  StdDev: {statistics.stdev(valid_ec):.0f} tok" if len(valid_ec) > 1 else f"  StdDev: n/a (n=1)")
+
 out.close()
-print(f"\nResults: {OUTPUT}")
+print(f"\\nResults: {OUTPUT}")

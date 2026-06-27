@@ -1,0 +1,183 @@
+{
+  "document_inventory": [
+    {
+      "name": "Algebra I Syllabus",
+      "type": "syllabus",
+      "subject": "Algebra I",
+      "grade_level": "Not specified",
+      "time_span": "2025-2026 School Year",
+      "explicit_content": "Course description, units of study, grading",
+      "implied_content": "Assessment and evaluation methods beyond unit tests and quizzes",
+      "clarity": "clear"
+    },
+    {
+      "name": "District Year at a Glance \u2014 Algebra I",
+      "type": "year_at_a_glance",
+      "subject": "Algebra I",
+      "grade_level": "Not specified",
+      "time_span": "2025-2026 School Year",
+      "explicit_content": "Unit schedule, checkpoints, district holidays",
+      "implied_content": "Instructional strategies and resources",
+      "clarity": "clear"
+    },
+    {
+      "name": "Ms. Rodriguez Notes \u2014 Algebra I",
+      "type": "teacher_note",
+      "subject": "Algebra I",
+      "grade_level": "Not specified",
+      "time_span": "2025-2026 School Year, based on previous year's experience",
+      "explicit_content": "Unit pacing adjustments, STAAR focus areas, resources used",
+      "implied_content": "Specific lesson plans and daily schedules",
+      "clarity": "partial"
+    }
+  ],
+  "syllabus": [
+    {
+      "unit": "Foundations of Algebra",
+      "sequence": 1,
+      "standards": [
+        "A1.1A",
+        "A1.1B",
+        "A1.1C"
+      ],
+      "duration_weeks": 3,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Solving Linear Equations",
+      "sequence": 2,
+      "standards": [
+        "A1.2A",
+        "A1.2B",
+        "A1.2C",
+        "A1.2D"
+      ],
+      "duration_weeks": 4,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Linear Inequalities",
+      "sequence": 3,
+      "standards": [
+        "A1.3A",
+        "A1.3B",
+        "A1.3C"
+      ],
+      "duration_weeks": 3,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Introduction to Functions",
+      "sequence": 4,
+      "standards": [
+        "A1.4A",
+        "A1.4B",
+        "A1.4C"
+      ],
+      "duration_weeks": 4,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Linear Systems",
+      "sequence": 5,
+      "standards": [
+        "A1.5A",
+        "A1.5B",
+        "A1.5C"
+      ],
+      "duration_weeks": 4,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Polynomials and Factoring",
+      "sequence": 6,
+      "standards": [
+        "A1.6A",
+        "A1.6B",
+        "A1.6C"
+      ],
+      "duration_weeks": 5,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Quadratic Functions",
+      "sequence": 7,
+      "standards": [
+        "A1.7A",
+        "A1.7B",
+        "A1.7C"
+      ],
+      "duration_weeks": 5,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    },
+    {
+      "unit": "Data Analysis and Probability",
+      "sequence": 8,
+      "standards": [
+        "A1.8A",
+        "A1.8B"
+      ],
+      "duration_weeks": 3,
+      "source_docs": [
+        "algebra1-syllabus.txt"
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "description": "Exponential functions are not covered",
+      "severity": "critical",
+      "inferred_from": "Ms. Rodriguez Notes \u2014 Algebra I",
+      "suggested_resolution": "Incorporate exponential functions into the curriculum"
+    },
+    {
+      "description": "Data analysis unit is underweighted",
+      "severity": "moderate",
+      "inferred_from": "Ms. Rodriguez Notes \u2014 Algebra I",
+      "suggested_resolution": "Consider adding more comprehensive data analysis topics or increasing the duration of Unit 8"
+    }
+  ],
+  "coverage": {
+    "total_standards": 24,
+    "covered": 24,
+    "uncovered": 0,
+    "partial": 0,
+    "notes": "All standards mentioned in the syllabus are covered by at least one unit, but some topics (like exponential functions) are not included."
+  },
+  "pacing": {
+    "mapped_weeks": 36,
+    "start_date": "August 25, 2025",
+    "end_date": "May 15, 2026",
+    "calendar_type": "90-minute block schedule, A/B days",
+    "source_doc": "District Year at a Glance \u2014 Algebra I and Ms. Rodriguez Notes \u2014 Algebra I"
+  },
+  "integrity": {
+    "documents_used": 3,
+    "documents_skipped": 0,
+    "skipped_reasons": [],
+    "conflicts_found": 0,
+    "conflicts": []
+  },
+  "_meta": {
+    "model": "hf.co/bartowski/Llama-3.3-70B-Instruct-GGUF:Llama-3.3-70B-Instruct-IQ3_M",
+    "backend": "tower-ollama",
+    "elapsed_s": 2153.7,
+    "completion_tokens": 1207,
+    "prompt_tokens": 2581,
+    "finish_reason": "stop"
+  }
+}

@@ -125,10 +125,11 @@
       ]
     },
     "checklist-prompt-specific": {
-      "version": "1.0.0",
-      "description": "Prompt-specific rubric with keyword router. 7 locked rubrics for different essay topics. Two-pass: route → grade with non-comp clause.",
+      "version": "1.1.0",
+      "description": "Prompt-specific rubric with keyword router. 7 locked rubrics for different essay topics. Two-pass: route → grade with non-comp clause. v1.1.0 adds BLUF system prompt for reasoning-length experiment.",
       "source": "asap_rubrics.py + batch_prompt_specific.py",
       "results_tagged": ["batch200_prompt_specific.txt"],
+      "system_prompt": "BOTTOM LINE UP FRONT: Lead with your scores. Be concise — no hedging, no over-explaining. You are an expert essay grader. Grade against the specific prompt and rubric provided.",
       "template": "A student was given the following writing prompt:\n\nWRITING PROMPT:\n---\n{prompt_text}\n---\n\nThe student wrote this essay in response:\n\nSTUDENT ESSAY:\n---\n{essay}\n---\n\nYou are grading this essay against a rubric designed specifically for this prompt.\nFor each criterion, choose ONE: [x] Met, [/] Partial, or [ ] Not met.\nThen provide a short verbatim quote from the STUDENT ESSAY as evidence.\n\nCRITICAL RULES:\n- Evidence MUST be copied VERBATIM from the student essay (no paraphrasing)\n- If you check [ ] Not met, write \"none\" as the evidence\n\nNON-COMPENSATION RULES — DO NOT REWARD SURFACE FEATURES:\n- [ ] is the DEFAULT. [x] and [/] must be EARNED with real substance.\n- Good grammar or polite tone do NOT earn [x] if the argument/content is weak.\n- [x] requires CONCRETE, SPECIFIC content relevant to THIS PROMPT.\n- Do NOT give partial credit ([/]) to be polite. Use [ ] when the criterion is truly absent.\n\nFORMAT: Respond with JSON ONLY. Start with ```json and end with ```.\n\nRUBRIC:\n{criteria_lines}\n\nRespond in valid JSON:\n```json\n{{\"criteria\": [{criteria_json_template}]}}\n```",
       "parameters": {
         "prompt_text": "The original writing prompt the student was given",

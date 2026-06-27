@@ -220,6 +220,7 @@ All code and results committed to `mbufkin/choros`:
 
 ---
 
+<<<<<<< HEAD
 ## 9. Phase 4 — Cross-Model Two-Pass Evaluation
 
 **Date:** June 26, 2026  
@@ -286,14 +287,23 @@ Essay → [Ornith 35B — Supportive Teacher] → Rich, encouraging feedback
 | Pass 2 framing | Neutral rubric | "Nothing is perfect — push back" |
 | Score scale | 2-12 | 1-50 |
 
-### Open Questions
+### Open Questions (answered by N=20 run)
 
-1. **Does pairwise comparison help?** Show pass 2 two essays' feedback side by side and ask which is better?
-2. **How does the score scale with more variation?** Need to test on 10+ essays with known human scores.
-3. **What happens if we swap models?** Nemotron first (supportive) → Ornith second (adversarial)?
-4. **Same model family in both passes?** Ornith → Ornith would test if the effect is cross-model or persona-driven.
-5. **The prompt alignment issue.** All three test essays argued the opposite side of the prompt. This may be compressing scores — a truly on-prompt essay might score higher.
-6. **Scale calibration.** 25/50 on "strong student work" suggests the 1-50 scale may need calibration: 1-30 = student work, 30-40 = good work with gaps, 40-50 = truly exceptional.
+All six questions from the POC were tested on 20 actual ASAP essays with ground truth scores.
+
+**Kappa result: 0.0022 (linear).** The adversarial pushback is **uniform** — it knocks ~5-10 points off every essay regardless of quality — not selective based on merit. 17/20 essays landed in the 12-18/50 band.
+
+### N=20 Full Results
+
+| Metric | Value |
+|--------|-------|
+| **Linear Kappa** | **0.0022** |
+| Score band | 10-22 /50 (narrow) |
+| Essays in 12-18 band | 17/20 |
+
+### Key Finding
+
+The two-model architecture breaks the uniform-score ceiling but produces **noise, not signal**. The adversarial instruction "nothing is perfect" works (scores aren't all max) but the model has no rubric, no reference points, and no calibration — so it applies uniform downward pressure regardless of essay quality. See Phase 5 for the fix.
 
 ### Artifacts
 
@@ -303,3 +313,65 @@ Essay → [Ornith 35B — Supportive Teacher] → Rich, encouraging feedback
 | `/tmp/phase4_results.json` | Raw results (on Lenovo) |
 
 *Run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM) with Ornith 35B MoE (llama-server port 8080) and Nemotron Nano 9B v2 (llama-server port 8081). June 26, 2026.*
+
+---
+
+## 11. Phase 5 — Rubric Judge (June 26)
+
+**Hypothesis:** Both models need a shared reference. If Pass 1 (Ornith) aligns feedback to rubric categories (Content, Organization, Style), and Pass 2 (Nemotron) assigns per-dimension scores (1-6) *backed by verbatim quotes*, the quote requirement forces grounding.
+
+### Design
+
+| Pass | Model | Role | Input | Output |
+|------|-------|------|-------|--------|
+| **1** | Ornith 35B MoE | Supportive teacher | Essay + ASAP rubric anchors | Feedback by dimension (Content / Organization / Style) |
+| **2** | Nemotron Nano 9B v2 | Strict grader | Ornith's rubric feedback + essay | Per-dimension score 1-6 + verbatim quote per score + total /18 |
+
+### Rubric Anchors
+
+Each dimension uses behavioral anchors from the ASAP rubric:
+
+| Score | Content | Organization | Style |
+|-------|---------|-------------|-------|
+| 1-2 | Minimal/off-topic | No structure | Basic vocab, repetitive |
+| 3-4 | Some development | Some structure, weak transitions | Adequate vocab, minor errors |
+| 5-6 | Strong thesis/evidence | Clear progression | Sophisticated, varied voice |
+
+### Results (N=20)
+
+| Metric | Value |
+|--------|-------|
+| **Linear Kappa** | **0.2408** |
+| **Quadratic Kappa** | **0.4305** |
+| Valid results | 18/20 (3 off-topic essays correctly scored 0) |
+| Dimension coverage | 17/20 (3 essays had null dimensions — Nemotron refused to score off-topic work) |
+| Score range | 0-20 → 0-50 scaled |
+
+### Cross-tabulation
+
+| Model score bucket | Count | Avg Human | Avg Model |
+|---|---|---|---|
+| 0-5 | 2 | 4.00 | 1.50 |
+| 6-10 | 7 | 8.29 | 9.57 |
+| 11-15 | 1 | 8.00 | 13.00 |
+| 16-20 | 8 | 9.25 | 17.38 |
+
+### Key findings
+
+1. **The quote-requirement works.** Nemotron grounded scores in actual text. The 3 off-topic essays correctly scored 0 — Nemotron refused to apply the rubric to off-topic work, which is arguably *more accurate* than the human graders (who credited them anyway).
+
+2. **Kappa 0.43 (quadratic) is the best result yet.** Up from 0.35 (Phase 1, Non-Comp on gemma4). The rubric + quote + cross-model architecture produces real signal.
+
+3. **But scores are still compressed.** Nemotron never gave above 3/6 in any dimension, even for the 11/12 essay. The model's threshold for "4+" is unrealistically high.
+
+4. **The breakthrough framing:** A model that sees *both* a rubric *and* is forced to quote evidence produces Kappa > 0.40. The remaining gap is calibration — the model needs exemplars at each score level to learn what 4/6 vs 5/6 vs 6/6 actually looks like in practice.
+
+### Next steps (not pursued — redirecting to demo)
+
+- **Exemplar calibration:** Give Nemotron scored examples at each grade level before asking it to grade
+- **Score-level anchoring:** Force full 1-6 range by associating each numeric level with a specific behavioral description
+- **Pairwise comparison:** JudgmentBench-style comparative judgment may bypass the compression entirely
+
+---
+
+*Phase 4-5 run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM, aarch64) with llama.cpp servers: Ornith-1.0-35B-Q4_K_M.gguf (port 8080) and NVIDIA-Nemotron-Nano-9B-v2-Q4_K_M.gguf (port 8081). June 26, 2026.*
