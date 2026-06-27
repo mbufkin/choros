@@ -217,3 +217,89 @@ All code and results committed to `mbufkin/choros`:
 ---
 
 *Run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM) with gemma4:26b, qwen3.6:35b-a3b, and nemotron-cascade-2 via Ollama. June 20, 2026.*
+
+---
+
+## 9. Phase 4 — Cross-Model Two-Pass Evaluation
+
+**Date:** June 26, 2026  
+**Models:** Ornith 35B MoE (Pass 1, supportive) → Nemotron Nano 9B v2 (Pass 2, adversarial)  
+**Status:** Proof of concept — 3 essays. Promising.
+
+### The Problem Revisited
+
+All prior phases proved the scoring-step bias (politeness override / walk-down) activates whenever a model has to produce a numeric score — even when fed honest critical feedback. Strategy D (checklist) worked around this but still showed model leniency on checkbox decisions.
+
+Phase 3 (Two-pass) used the *same* model family for both passes and asked the second pass to *score the essay blindly from feedback*. That failed because the scoring-step bias is the same model's pattern — it overruled its own honest feedback.
+
+### The Insight
+
+Don't fight the politeness — **use it**. The first pass should be maximally supportive (where LLMs are naturally good). Then a *different model from a different family* reviews the *first pass's assessment*, not the essay. The second model is told "nothing is perfect" — it's reviewing a peer reviewer, which is a fundamentally different cognitive task than grading a student.
+
+### Architecture
+
+```
+Essay → [Ornith 35B — Supportive Teacher] → Rich, encouraging feedback
+                                              ↓
+                       [Nemotron 9B — Adversarial Reviewer]
+                       Reads the feedback + original essay
+                       Told: "Nothing is perfect. Push back."
+                       ↓
+                       Score: X/50 + evidence-based reasoning
+```
+
+### Pass 1 Prompt (Ornith — Supportive)
+
+> You are a supportive teacher reading a student essay. Write feedback: what the student is saying, what works well (quote passages), gentle suggestions. Be warm, specific, and encouraging.
+
+### Pass 2 Prompt (Nemotron — Adversarial)
+
+> You are a tough but fair reviewer. Read the supportive feedback below and provide a reality check. The first evaluator was being nice. You are not. Is the first evaluator being too generous? Nothing is perfect. Every essay has room to grow. Give a score 1-50 and your reasoning. Reference the first evaluator's claims and push back where needed.
+
+### Results
+
+| Essay | Length | Key Issue | Score |
+|-------|--------|-----------|-------|
+| Weak (wrong side, 2 lines) | 194 chars | Argues *for* uniforms, prompt asks *against* | **12/50** |
+| Medium (balanced, pro-uniform) | 621 chars | Wrong side of prompt, no specific examples | **18/50** |
+| Strong (3 reasons, structured) | 711 chars | Good structure but no concrete evidence | **25/50** |
+
+### Key Observations
+
+1. **No politeness override.** Nemotron pushed back on Ornith's generous feedback consistently — "The first evaluator's praise for the 'balanced approach' overlooks the fundamental mismatch between the essay's stance and the prompt."
+
+2. **Score spread is real.** 12 vs 18 vs 25. Compare to previous phases where everything compressed to 1 or a uniform 4-5 band.
+
+3. **Evidence-based pushback.** Nemotron quoted specific lines from Pass 1 feedback and corrected them, rather than pattern-matching a number.
+
+4. **The "nothing is perfect" framing works.** Even the strong essay got 25/50. The model genuinely looked for gaps.
+
+5. **Score is depressed but consistent.** 25/50 for "solid student work with clear evidence gaps" aligns with the scale description (30 = solid, 40 = excellent, 50 = exceptional).
+
+### What's Different From Phase 3
+
+| | Phase 3 | Phase 4 |
+|---|---|---|
+| Pass 1 model | Gemma4 | Ornith 35B |
+| Pass 2 model | Gemma4 (same) | Nemotron 9B (different family) |
+| Pass 2 task | Score essay blindly from feedback | Review first evaluator's assessment |
+| Pass 2 framing | Neutral rubric | "Nothing is perfect — push back" |
+| Score scale | 2-12 | 1-50 |
+
+### Open Questions
+
+1. **Does pairwise comparison help?** Show pass 2 two essays' feedback side by side and ask which is better?
+2. **How does the score scale with more variation?** Need to test on 10+ essays with known human scores.
+3. **What happens if we swap models?** Nemotron first (supportive) → Ornith second (adversarial)?
+4. **Same model family in both passes?** Ornith → Ornith would test if the effect is cross-model or persona-driven.
+5. **The prompt alignment issue.** All three test essays argued the opposite side of the prompt. This may be compressing scores — a truly on-prompt essay might score higher.
+6. **Scale calibration.** 25/50 on "strong student work" suggests the 1-50 scale may need calibration: 1-30 = student work, 30-40 = good work with gaps, 40-50 = truly exceptional.
+
+### Artifacts
+
+| File | Description |
+|---|---|
+| `/tmp/phase4_pipeline.py` | Two-pass pipeline script (on Lenovo) |
+| `/tmp/phase4_results.json` | Raw results (on Lenovo) |
+
+*Run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM) with Ornith 35B MoE (llama-server port 8080) and Nemotron Nano 9B v2 (llama-server port 8081). June 26, 2026.*

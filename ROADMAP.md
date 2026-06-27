@@ -37,6 +37,7 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [ ] **Consistency checker** — third grader axis. Does the student's answer hold together internally?
 - [ ] **Pairwise comparison experiment** — JudgmentBench showed comparative beats rubrics for high-judgment domains.
 - [ ] **Prompt sensitivity audit** — map what prompt wording changes affect bias (we saw -0.042 to 0.318).
+- [ ] **Phase 4: Cross-model two-pass evaluation** — Ornith 35B (supportive) → Nemotron 9B (adversarial).
 - [ ] **STAAR item guardrail pass** — score 7 STAAR Algebra 1 items against ground truth.
 
 ## Next (Post-POC)
