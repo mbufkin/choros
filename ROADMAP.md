@@ -40,8 +40,11 @@ LLM-as-judge calibration — measure and eliminate scoring compression bias befo
 - [x] **Phase 4: Cross-Model Two-Pass** — Ornith 35B (supportive) → Nemotron 9B (adversarial). Kappa 0.002. Too much drift — models push back uniformly.
 - [x] **Phase 5: Rubric Judge** — Ornith (rubric-aligned feedback) → Nemotron (per-dimension scores + quotes). **Kappa 0.4305 (quadratic) — best result.** 3-tier rubric anchors force grounding.
 - [x] **Phase 6: Calibrated Judge** — Model observes (no scores), deterministic scoring. Kappa 0.012. Pattern correct, but observation range still compressed (1-3/6). Bottleneck is exemplar distribution, not architecture.
-- [x] **Exemplar-grounded scoring** — Phase 7: Decision-tree grading. Full ordinal scale with NO number output from model. 5-level: Kappa 0.358/0.617. 7-level: 0.376/0.622. Ceiling is node question tuning, not architecture. Model floor: ≥49B. Full doc in docs/scoring-bias-experiment.md §14.
-- [ ] **Node question calibration** — Phase 7 needs tighter depth_gate phrasing. Current gates too lenient at the top end.
+|- [x] **Exemplar-grounded scoring** — Phase 7: Decision-tree grading. Full ordinal scale with NO number output from model. 5-level: Kappa 0.358/0.617. 7-level: 0.376/0.622. Ceiling is node question tuning, not architecture. Model floor: ≥49B. Full doc in docs/scoring-bias-experiment.md §14.
+|- [x] **Split depth gate tuning** — Phase 7.2: 3 sub-gates (efficiency, insightfulness, analysis_depth). Linear 0.424 / Quadratic 0.669. +18%/+8% over Phase 7.0.
+|- [x] **Directed Acyclic Graph (DAG)** — Pattern exploration: 7 parallel dimensions, continuous scoring, multiple paths to each level. **Linear 0.473 / Quadratic 0.727 — best result.** H=10 ceiling broken. Graceful failure under model error.
+|- [ ] **DAG threshold calibration** — H=6 floor (currently Novice), H=11 ceiling (should be Distinguished), H=9 compression (below Advanced by 0.4-0.5). Threshold adjustment only, no architecture change needed.
+|- [ ] **Remaining patterns to test** — Weighted Checklist, Bayesian Network, Delphi iterative refinement, Spanning Forest, Gaussian Process
 
 ## Next (Post-POC)
 

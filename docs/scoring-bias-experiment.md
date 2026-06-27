@@ -545,3 +545,139 @@ H=11 → Distinguished ❌ (should be Exemplary)
 - Full documentation: [[50-Research/Phase 7 — Decision Tree Grading Architecture]]
 
 *Phase 7.1 run on NVIDIA API with nvidia/llama-3.3-nemotron-super-49b-v1. June 27, 2026.*
+
+---
+
+### 15. Phase 7.2 — Split Depth Gate Tuning (June 27)
+
+The 7-level expansion failed because the single "depth" gate was too lenient. The fix: **split depth into 3 sub-gates** — `efficiency`, `insightfulness`, `analysis_depth` — each evaluated independently before reaching Proficient/Advanced.
+
+**Tree structure (5-level, split depth):**
+```
+task_alignment → completeness → quality_gate → correctness → clarity
+  → efficiency → insightfulness → analysis_depth → Advanced/Proficient
+```
+
+Each sub-gate is a separate YES/NO question with quote evidence. The model must pass all three to reach Advanced. Failing any one drops to Proficient.
+
+**Result: +18% linear Kappa, +8% quadratic Kappa.**
+
+| Version | Levels | Sub-gates | Linear K | Quadratic K |
+|---------|--------|-----------|----------|-------------|
+| 5-level (7.0) | 5 | 1 × depth | 0.358 | 0.617 |
+| 7-level (7.1) | 7 | 1 × depth | 0.376 | 0.622 |
+| **7.2** | **5** | **3 × split depth** | **0.424** | **0.669** |
+
+**Confusion (Phase 7.2):**
+```
+H= 2 → Novice ✅
+H= 6 → Developing ✅
+H= 7 → 2× Developing ✅
+H= 8 → 1× Developing, 6× Proficient, 1× Advanced 🔶 (still compressed)
+H= 9 → 1× Proficient, 2× Advanced ❌ (overgrade)
+H=10 → 4× Advanced ❌ (ceiling)
+H=11 → Advanced ❌
+```
+
+The split depth gates fixed mid-range (H=7-8) discrimination but the H=9-10 ceiling persisted. Models unanimously agree that H=10 essays are "Advanced" — no split votes at this level.
+
+**Diversity check (3-model pass, N=20, Phase 7.2 tree):**
+Models: Nemotron 49B, Llama 3.3 70B, Mistral Small 4 119B. 91% unanimous agreement. The three models converge on the same path for most essays. Ensemble voting does not break the ceiling because the bias is **systematic, not stochastic** — they all overscore the same essays in the same way.
+
+### Artifacts
+
+- `phase72_nemotron49_n20.py` — Phase 7.2 script
+- `phase72_70b.py` — Llama 3.3 70B run
+- `phase72_mistral.py` — Mistral Small 4 119B run
+- Results at `/tmp/phase72_nemotron49_n20_results.json`
+- Full documentation: [[50-Research/Phase 7 — Decision Tree Grading Architecture]]
+
+*Phase 7.2 runs on NVIDIA API (nvidia/llama-3.3-nemotron-super-49b-v1, meta/llama-3.3-70b-instruct, mistralai/mistral-small-4-119b-2603). June 27, 2026.*
+
+---
+
+### 16. Pattern 3 — Directed Acyclic Graph (DAG) (June 27)
+
+**Date:** June 27, 2026  
+**Model:** nvidia/llama-3.3-nemotron-super-49b-v1 (Q4_K_M, 29GB) on G10 via llama.cpp  
+**Thesis:** A binary decision tree forces every essay through a single path. One wrong node answer derails the grade. A Directed Acyclic Graph (DAG) evaluates **multiple dimensions in parallel**, then combines them through configurable rules. Multiple paths can reach the same level.
+
+#### Why DAG Instead of Tree
+
+The decision tree (Phase 7) has a single path weakness: if the model says "NO" at task_alignment for an on-topic essay, the grade is irrecoverable. The Mistral 119B run demonstrated this — it called an H=7 essay "Off-Task" at node 1, killing the entire grade.
+
+A DAG avoids this by:
+- Evaluating 7 independent dimensions: task_compliance, completeness, correctness, clarity, depth_analysis, insight_originality, efficiency
+- Each dimension returns a 3-level score (0/1/2 or 0/1.5/3)
+- The Python layer combines them via rules, not a single path
+- No single bad answer can tank the grade — strong depth compensates for weak clarity
+
+#### DAG Scoring Rules
+
+```
+base  = task_compliance + completeness                     (0-4)
+quality = correctness + clarity                             (0-5)
+depth = max(depth_analysis, insight_originality) + bonus    (0-5)
+form = efficiency                                           (0-1.5)
+total = base + quality + depth + form                       (0-15.5)
+```
+
+Bonus: +1 if BOTH depth_analysis ≥ 1.5 AND insight_originality ≥ 1
+
+#### 6-Level Map
+
+| Level | Score Range | Description |
+|-------|-------------|-------------|
+| Off-Task | 0-1.9 | Does not address prompt |
+| Novice | 2-4.9 | Minimal attempt |
+| Developing | 5-7.9 | Basic response, significant weaknesses |
+| Proficient | 8-10.9 | Solid response, minor weaknesses |
+| Advanced | 11-13.4 | Strong response with notable depth |
+| Distinguished | 13.5-15.5 | Exceptional depth and originality |
+
+#### Results
+
+| Metric | Phase 7.2 (tree) | **Pattern 3 (DAG)** | Δ |
+|--------|-----------------|-------------------|----|
+| **Linear Kappa** | 0.424 | **0.473** | **+0.049** |
+| **Quadratic Kappa** | 0.669 | **0.727** | **+0.058** |
+
+**Confusion (DAG):**
+```
+H= 2 → Novice  ✅
+H= 6 → Novice  ❌ (too harsh — should be Developing)
+H= 7 → 2× Developing  ✅
+H= 8 → 3× Developing, 5× Proficient  🔶 (good spread)
+H= 9 → 3× Proficient  🔶 (still compressed)
+H=10 → 1× Advanced, 3× Distinguished  ✅ (ceiling broken!)
+H=11 → Advanced  ❌ (should be Distinguished)
+```
+
+#### Key Wins
+
+1. **H=10 ceiling broken.** The old tree compressed every H=10 to Advanced (5/5). The DAG gives 3/4 Distinguished (6/6). The `depth_analysis + insight_originality` combo catches nuance that a single binary "insightfulness" gate misses.
+
+2. **H=8 differentiation.** The DAG produces a natural spread (3 Developing, 5 Proficient) rather than compressing all H=8s to Proficient. Essays like asap-86 (short, 3 sentences) correctly land in Developing, while asap-182 (well-structured, nuanced) lands in Proficient.
+
+3. **Graceful failure.** No single bad answer kills a grade. Even if the model misjudges one dimension, the other 6 compensate. This is fundamentally more robust than a tree.
+
+#### Remaining Issues
+
+1. **H=6 → Novice** is too harsh. The H=6 essay scored low on completeness and correctness, hitting the floor. The DAG needs a floor-lift for essays that attempt the task but execute poorly. Solution: cap "Novice" at base_score < 3 OR weight base_score less heavily.
+
+2. **H=9 compression.** All 3 H=9 essays hit Proficient (4/6) at total=8.5-10.5. The Proficient ceiling is 10.9. Two of them are 0.4-0.5 away from Advanced. The thresholds need calibration.
+
+3. **H=11 miss.** The best essay scored total=12.0, just 0.5 below Distinguished (13.5). This is a boundary problem, not a structural one. The `efficiency` dimension (max 1.5, scored 0) is the likely culprit — the H=11 essay is dense, not efficient. Either lower the Distinguished threshold to 12.5, or remove the efficiency penalty for high-density writing.
+
+#### API Cost
+
+Pattern: 140 API calls per N=20 run (7 dimensions × 20 essays).  
+Local (G10, 9 tok/s): ~14 min.  
+API (NVIDIA, ~1s/call): ~3 min.
+
+#### Artifacts
+
+- `pattern3_dag.py` — DAG runner script (local + API, saves after each essay)
+- Results at `/tmp/pattern3_dag_results.json`
+
+*Pattern 3 DAG run on Lenovo DGX Spark (NVIDIA GB10, 119GB RAM, aarch64) with llama.cpp server on port 8081: nvidia/Llama-3.3-Nemotron-Super-49B-v1-GGUF Q4_K_M (29GB). June 27, 2026.*

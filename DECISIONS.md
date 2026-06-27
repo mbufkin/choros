@@ -45,6 +45,20 @@ Scoring bias lives in the scoring step, not the observation step. Every prior ph
 
 Full documentation: [[50-Research/Phase 7 — Decision Tree Grading Architecture]]
 
+### Phase 7.2 — Split Depth Gate Tuning (2026-06-27)
+The single "depth" gate was split into 3 sub-gates (efficiency, insightfulness, analysis_depth). Each is a separate YES/NO question with quote evidence. Passing all three is required for Advanced.
+
+**Result:** Linear 0.424 / Quadratic 0.669 — +18%/+8% over Phase 7.0
+
+### Pattern 3 — Directed Acyclic Graph (DAG) (2026-06-27)
+Replaced the binary tree with 7 parallel quality dimensions evaluated independently, combined via configurable rules. Multiple paths can reach the same grade level — no single bad node answer derails the score.
+
+**Result:** Linear **0.473** / Quadratic **0.727** — our best score. H=10 ceiling broken (3/4 Distinguished vs 4/4 Advanced in Phase 7.2). Produces natural essay differentiation at mid-range. Graceful failure under model error.
+
+**Key insight:** Parallel evaluation outperforms sequential routing. The DAG's 7-dimension continuous scoring avoids the single-path weakness of binary trees. Threshold calibration (H=11→Distinguished, H=6 floor) is the remaining work, not architecture.
+
+Full documentation: [[scoring-bias-experiment.md#16-pattern-3--directed-acyclic-graph-dag-june-27]]
+
 ## Deferred
 
 ### Pacing Adjustments (Lagging / Ahead)
