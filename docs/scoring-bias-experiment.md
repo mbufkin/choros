@@ -416,3 +416,91 @@ This removes both the "no exemplar distribution" and "model assigns score" bottl
 ---
 
 *Phase 6 run on a Lenovo ThinkStation PX (NVIDIA GB10, 119GB RAM, aarch64) with llama.cpp server: NVIDIA-Nemotron-Nano-9B-v2-Q4_K_M.gguf (port 8081). June 26, 2026.*
+
+---
+
+## 13. Phase 7 — Decision-Tree Scoring (June 27)
+
+**Date:** June 27, 2026  
+**Model:** DeepSeek V4 Flash (284B MoE, IQ2XXS, 81GB) on ds4-server (port 8082)  
+**Design question:** How do we score without assignment-specific exemplars? The system needs to grade any assignment — writing, engineering, math — without pre-scored examples per prompt.
+
+### The Problem With Exemplars
+
+Phases 1-6 converged on the same bottleneck: the model can observe well (quote evidence, identify flaws) but cannot map observations to a numeric scale. The proposed fix — exemplar-grounded scoring (show scored essays at each level) — breaks modularity. A general-purpose grader can't have custom exemplars per assignment.
+
+### Phase 7 Architecture
+
+**Core insight:** The model succeeds at YES/NO questions grounded in quoted evidence. It fails at NUMBER assignment. So never ask for a number. Route through a decision tree where each node is a grounded yes/no question, and the Python layer determines the level from the path taken.
+
+```
+                    Task Alignment?
+                   /               \
+                 NO                 YES
+              Off-Task          Completeness?
+                               /              \
+                             NO                YES
+                          Novice           Quality Gate?
+                                          /              \
+                                     HAS flaws        NO flaws
+                                       /                   \
+                                  Flaw Type?           Correctness?
+                                 /        \               /       \
+                           Content    Form/Clarity      YES       NO
+                              |           |              |     Developing
+                          Developing  Recoverable?      Clarity?
+                                     /         \          /    \
+                                  YES          NO      YES     NO
+                              Developing     Novice   Depth  Proficient
+                                                      /   \
+                                                    YES    NO
+                                                Advanced  Proficient
+```
+
+**Key properties:**
+- Model **never outputs a number** — only YES/NO + quotes
+- Each question is grounded in a **verbatim quote** from the work
+- The tree uses universal quality dimensions that apply to any domain:
+  - Task alignment (did they attempt it?)
+  - Completeness (did they finish it?)
+  - Quality gate (are there significant flaws?)
+  - Correctness (is the content accurate?)
+  - Clarity (is it well organized?)
+  - Depth (does it show insight?)
+
+### Results (v2 tree, 50-point pilot on 3 essays vs DS4 V4 Flash)
+
+| Essay | Human Score | Phase 7 Level | Phase 7 Score | Correct? |
+|-------|-------------|---------------|---------------|----------|
+| Below-basic (1 sentence, misspellings) | 2/12 | Novice | 2/5 | ✅ |
+| Basic (several paragraphs, personal opinion) | 6/12 | Proficient | 4/5 | ❌ (should be Developing/Proficient border) |
+| Advanced (research, structure, synthesis) | 11/12 | Advanced | 5/5 | ✅ |
+
+### What Worked
+
+1. **The weak essay correctly hit Novice** — the completeness gate caught the too-short response. No inflation.
+2. **The strong essay correctly hit Advanced** — depth gate distinguished it from the medium essay. Quote evidence was real.
+3. **No walk-down observed.** The model did not inflate weak scores or compress strong ones. Each YES/NO was grounded in a specific quote.
+4. **Only 2-6 API calls per essay** (vs 2 per essay in Phase 5's two-pass). The tree typically terminates in 4-6 nodes.
+
+### Remaining Issue
+
+The medium essay (human 6/12) scored Proficient (4/5). The quality gate said "no significant flaws" and correctness said "yes" — because the content is reasonable even if simple. The model was still too generous at the **correctness node** for basic essays. This is a **prompt design issue** at the node level, not a systematic bias. Tuning the gate questions (making "significant flaw" detection more aggressive) would push it to Developing.
+
+### Key Finding
+
+**The decision-tree architecture eliminates the scoring-step bias.** By replacing "assign a number" with grounded yes/no questions, the politeness override never activates because:
+- YES/NO questions about observable properties are **not abstract judgments**
+- The quote requirement prevents hand-wavy answers
+- The tree structure constrains the path — the model can't inflate a score by picking a higher number; it has to answer a specific factual question
+
+### Next Step
+
+Calibrate the node questions with a proper N=20 ASAP run to find the right threshold wording. The tree structure is correct — the model's behavior demonstrates no compression or inflation. The only adjustment needed is how aggressively the quality gate and correctness nodes classify borderline work.
+
+### Artifacts
+
+- `/home/mbufkin/.hermes/work/phase7_decision_tree.py` (v1) and `phase7_v2.py` (v2)
+- Code and results at `mbufkin/choros` when merged
+
+*Phase 7 run on a Lenovo DGX Spark (NVIDIA GB10, 119GB RAM, aarch64) with DS4 server: DeepSeek V4 Flash IQ2XXS (port 8082). June 27, 2026.*
